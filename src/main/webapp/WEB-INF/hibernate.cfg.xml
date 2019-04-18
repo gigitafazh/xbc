@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD//EN" 
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+	      <!-- mapping apabila menggunakan annotation -->
+	      <!-- contoh :
+	           <mapping class="xbc.model.Barang"/>
+	       -->
+	      <mapping class="xbc.model.User"/>
+	      <mapping class="xbc.model.Role"/>
+	      <mapping class="xbc.model.Office"/>
+	      <mapping class="xbc.model.Room"/>
+	      <mapping class="xbc.model.Menu"/>
+	      <mapping class="xbc.model.MenuAccess"/>
+	</session-factory>
+</hibernate-configuration>
