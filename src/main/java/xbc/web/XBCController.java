@@ -25,22 +25,22 @@ public class XBCController {
 		return "user";
 	}
 	
-	@RequestMapping("role")
+	@RequestMapping("/secure/role")
 	public String role() {
 		return "role";
 	}
 	
-	@RequestMapping("office")
+	@RequestMapping("/secure/office")
 	public String office() {
 		return "office";
 	}
 	
-	@RequestMapping("menu")
+	@RequestMapping("/secure/menu")
 	public String menu() {
 		return "menu";
 	}
 	
-	@RequestMapping("menu-access")
+	@RequestMapping("/secure/menu-access")
 	public String menuAccess() {
 		return "menu-access";
 	}

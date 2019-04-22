@@ -9,9 +9,9 @@ public interface OfficeService {
 
 	public Collection<Office> findAll();
 
-	public void save(Office office);
+	public void save(Office office, int sessionId);
 	
-	public Office update(Office office);
+	public Office update(Office office, int sessionId);
 
 	public void delete(Office office);
 
@@ -19,5 +19,5 @@ public interface OfficeService {
 
 	public Collection<Office> search(String name);
 	
-	public Office deleteDisabled(int id);
+	public Office deleteDisabled(int id, int sessionI);
 }

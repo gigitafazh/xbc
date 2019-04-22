@@ -17,9 +17,7 @@ public interface UserDao {
 
 	public void save(User user);
 	
-	public Collection<User> search(String find);
-
-	public User deleteDisabled(User user);
-
 	public User findByUsername(String username);
+	
+	public Collection<User> search(String find);
 }

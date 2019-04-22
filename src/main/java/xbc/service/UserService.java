@@ -19,7 +19,7 @@ public interface UserService {
 
 	public Collection<User> search(String find);
 	
-	public User deleteDisabled(User user);
-
 	public User findByUsername(String name);
+	
+	public User deleteDisabled(int id, int sessionId);
 }

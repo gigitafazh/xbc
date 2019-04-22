@@ -27,22 +27,22 @@ public class OfficeServiceImpl implements OfficeService {
 	}
 
 	@Override
-	public void save(Office office) {
+	public void save(Office office, int sessionId) {
 		office.setCreatedOn(new Date());
-		office.setCreatedBy(0);
+		office.setCreatedBy(sessionId);
 		office.setDeleted(false);
 		officeDao.save(office);
 	}
 
 	@Override
-	public Office update(Office newOffice) {
+	public Office update(Office newOffice, int sessionId) {
 		Office office = officeDao.findOne(newOffice.getId());
 		office.setName(newOffice.getName());
 		office.setPhone(newOffice.getPhone());
 		office.setEmail(newOffice.getEmail());
 		office.setAddress(newOffice.getAddress());
 		office.setNotes(newOffice.getNotes());
-		office.setModifiedBy(0);
+		office.setModifiedBy(sessionId);
 		office.setModifiedOn(new Date());
 		return officeDao.update(office);
 	}
@@ -63,9 +63,9 @@ public class OfficeServiceImpl implements OfficeService {
 	}
 
 	@Override
-	public Office deleteDisabled(int id) {
+	public Office deleteDisabled(int id, int sessionId) {
 		Office office = officeDao.findOne(id);
-		office.setDeletedBy(0);
+		office.setDeletedBy(sessionId);
 		office.setDeletedOn(new Date());
 		office.setDeleted(true);
 		return officeDao.update(office);

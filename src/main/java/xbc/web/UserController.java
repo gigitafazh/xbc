@@ -25,19 +25,19 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Collection<User>> findAll() {
-		Collection<User> list = userService.findAll();
-
-		ResponseEntity<Collection<User>> result = new ResponseEntity<>(list, HttpStatus.OK);
-		return result;
-	}
-
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<User> findOne(@PathVariable("id") int id) {
 		User user = userService.findOne(id);
 
 		ResponseEntity<User> result = new ResponseEntity<>(user, HttpStatus.OK);
+		return result;
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<Collection<User>> findAll() {
+		Collection<User> list = userService.findAll();
+
+		ResponseEntity<Collection<User>> result = new ResponseEntity<>(list, HttpStatus.OK);
 		return result;
 	}
 
@@ -64,5 +64,13 @@ public class UserController {
 		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<User> deleteDisabled(@PathVariable("id") int id, HttpSession session) {
+		userService.deleteDisabled(id, (int) session.getAttribute("sessionId"));
+
+		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
+		return result;
 	}
 }

@@ -6,7 +6,9 @@
 		<pattern>/assets/*</pattern>
 		<pattern>/index</pattern>
 		<pattern>/login</pattern>
+		<pattern>/login?error</pattern>
 		<pattern>/forgot-password</pattern>
+		<pattern>/new-password</pattern>
 	</excludes>
 
 	<decorator name="main" page="main.jsp">

@@ -2,6 +2,8 @@ package xbc.web;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import xbc.model.Office;
 import xbc.service.OfficeService;
 
 @RestController
-@RequestMapping("/office")
+@RequestMapping("secure/office")
 public class OfficeController {
 
 	@Autowired
@@ -47,16 +49,16 @@ public class OfficeController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<Office> save(@RequestBody Office office) {
-		officeService.save(office);
+	public ResponseEntity<Office> save(@RequestBody Office office, HttpSession session) {
+		officeService.save(office, (int) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<Office> update(@RequestBody Office office) {
-		officeService.update(office);
+	public ResponseEntity<Office> update(@RequestBody Office office, HttpSession session) {
+		officeService.update(office, (int) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -64,8 +66,8 @@ public class OfficeController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Office> deleteDisabled(@PathVariable("id") int id) {
-		officeService.deleteDisabled(id);
+	public ResponseEntity<Office> deleteDisabled(@PathVariable("id") int id, HttpSession session) {
+		officeService.deleteDisabled(id, (int) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;

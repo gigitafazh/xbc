@@ -46,7 +46,7 @@
 	<authentication-manager>
 		<authentication-provider>
 			<jdbc-user-service data-source-ref="dataSource"
-				users-by-username-query="SELECT username, password, deleted FROM t_user WHERE username=?"
+				users-by-username-query="SELECT username, password, 1 AS deleted FROM t_user WHERE username=?"
 				authorities-by-username-query="SELECT DISTINCT u.username, r.name FROM t_user u left join t_role r on r.id = u.role_id WHERE u.username=?" />
 		</authentication-provider>
 	</authentication-manager>

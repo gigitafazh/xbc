@@ -51,7 +51,7 @@ public class User implements Serializable {
 	private int mobileToken;
 
 	@Column(name = "created_by", length = 11, nullable = false)
-	private int createdBy = 0;
+	private int createdBy;
 
 	@Column(name = "created_on", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)

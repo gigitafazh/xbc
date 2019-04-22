@@ -17,7 +17,7 @@ import xbc.model.Role;
 import xbc.service.RoleService;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("secure/role")
 public class RoleController {
 
 	@Autowired

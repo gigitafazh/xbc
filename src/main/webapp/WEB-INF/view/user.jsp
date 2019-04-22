@@ -2,16 +2,8 @@
 
 <head>
 <script>
-	var modeSubmit = 'insert';
 	var tbUser;
-
-	var currentdate = new Date();
-	var datetime = currentdate.getFullYear() + "-"
-			+ (currentdate.getMonth() + 1) + "-" + currentdate.getDate() + " "
-			+ currentdate.getHours() + ":" + currentdate.getMinutes() + ":"
-			+ currentdate.getSeconds();
-	//document.write(datetime);
-
+	
 	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
@@ -21,68 +13,26 @@
 		return indexed_array;
 	}
 
-	// function untuk load data dropdown role
-	function showDataRole(d) {
-		var s = '<option>Silahkan Pilih</option>';
-		$(d)
-				.each(
-						function(index, element) {
-							s += '<option value="' + element.id + '" data-nama="' + element.name + '">'
-									+ element.name + '</option>';
-						});
-		$('#roleId').html(s);
-		$('#roleId2').html(s);
-		$('#roleId3').html(s);
-		$('#roleId4').html(s);
-	}
-
-	function loadDataRole() {
+	// function untuk show data dropdown role
+	function showRole() {
 		$.ajax({
 			type : 'get',
 			url : 'role/',
 			success : function(d) {
-				showDataRole(d);
-			},
-			error : function(d) {
-				console.log('Error');
+				var s = '<option">Choose Role</option>';
+
+				$(d).each(function(index, element) {
+					s += '<option value="' + element.id + '" data-nama="' + element.name + '">'
+						+ element.name + '</option>';
+				});
+				$('#roleId').html(s);
+				$('#roleId2').html(s);
 			}
 		});
 	}
 
-	// function untuk load data user
-	function showData(d) {
-		tbUser.clear().draw();
-		$(d)
-				.each(
-						function(index, element) {
-							if (element.deleted == false) {
-								tbUser.row
-										.add(
-												[
-														element.username,
-														element.role.name,
-														element.email,
-														'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-																+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-																+ '<li><input class="btn btn-default" data-toggle="modal"'
-																+ 'data-target="#modalEdit" value="Edit" onclick="loadEdit(\''
-																+ element.id
-																+ '\')"></li>'
-																+ '<li><input class="btn btn-default" data-toggle="modal"'
-																+ 'data-target="#modalReset" value="Reset" onclick="loadReset(\''
-																+ element.id
-																+ '\')"></li>'
-																+ '<li><input class="btn btn-default" data-toggle="modal"'
-																+ 'data-target="#modalDelete" value="Delete" onclick="loadDelete(\''
-																+ element.id
-																+ '\')"></li></ul></div>' ])
-										.draw();
-							}
-						})
-
-	}
-
-	function loadData() {
+	// function untuk show data user
+	function showData() {
 		var search = $('#search').val();
 		var url = '';
 		if (search == '') {
@@ -94,34 +44,96 @@
 			type : 'get',
 			url : url,
 			success : function(d) {
-				showData(d);
+				tbUser.clear().draw();
+				$(d).each(function(index, element) {
+					tbUser.row.add([
+						element.username,
+						element.role.name,
+						element.email,
+						'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+						+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+						+ '<li><a href="javascript:void(0)" onclick="loadData('
+						+ element.id
+						+ ')">Edit</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="loadReset('
+						+ element.id
+						+ ')">Reset Password</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="deleteDisabled('
+						+ element.id
+						+ ')">Delete</a></li>'
+						+ '</ul></div>',
+						element.id ])
+					.draw();
+				});
 			},
-			error : function(d) {
-				console.log('Error');
-			}
 		});
 	}
 
-	// function untuk save data user
-	function saveAdd() {
-		var method;
-		var data = getFormData($('#form-add'));
+	// function untuk load edit data user
+	function loadData(id) {
+		$.ajax({
+			type : 'get',
+			url : 'user/' + id,
+			success : function(d) {
+				$('#form-edit input[name=idEdit]').val(d.id);
+				$('select[name=roleId2]').val(d.roleId);
+				$('input[name=email]').val(d.email);
+				$('input[name=username]').val(d.username);
+				$('input[name=mobileFlag]').val(d.mobileFlag);
+				$('input[name=mobileToken]').val(d.mobileToken);
+				$('#form-edit').trigger('reset');
+			},
+			error : function(d) {
+				console.log('Error!');
+			}
+		});
+		$('#modal-edit').modal('show');
+	}
 
-		if (modeSubmit == 'insert') {
-			method = 'post';
-		} else {
-			method = 'put';
+	// function untuk load reset data user
+	function loadReset(id) {
+		$.ajax({
+			type : 'get',
+			url : 'user/' + id,
+			success : function(d) {
+				$('#form-reset input[name=idEdit]').val(d.id);
+				$('input[name=password]').val(d.password);
+				$('#form-reset').trigger('reset');
+			},
+			error : function(d) {
+				console.log('Error!');
+			}
+		});
+		$('#modal-reset').modal('show');
+	}
+	
+	// function untuk save data user
+	function saveData(tipe) {
+		var method;
+		if (tipe == 'add') {
+			method = 'POST';
+			var data = getFormData($('#form-add'));
+		} else if (tipe == 'edit') {
+			method = 'PUT';
+			var data = getFormData($('#form-edit'));
+		} else if (tipe == 'reset') {
+			method = 'PUT';
+			var data = getFormData($('#form-reset'));
 		}
+
 		$.ajax({
 			type : method,
 			url : 'user/',
 			data : JSON.stringify(data),
 			contentType : 'application/json',
 			success : function(d) {
-				loadData();
-				modeSubmit = 'insert';
-				$('#roleId, #email, #username, #password').val('');
-				location.reload();
+				showData();
+				$('#modal-add').modal('hide');
+				$('#modal-edit').modal('hide');
+				$('#modal-reset').modal('hide');
+				$('#form-add').modal('reset');
+				$('#form-edit').modal('reset');
+				$('#form-reset').modal('reset');
 			},
 			error : function(d) {
 				console.log('Error');
@@ -129,144 +141,25 @@
 		});
 	}
 
-	// function untuk save update data user
-	function saveEdit() {
-		var data = getFormData($('#form-edit'));
-		$.ajax({
-			type : 'put',
-			url : 'user/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				loadData();
-				modeSubmit = 'update';
-				console.log(d);
-				location.reload();
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk save reset password user
-	function saveReset() {
-		var data = getFormData($('#form-resetPass'));
-		$.ajax({
-			type : 'put',
-			url : 'user/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				if (d.retypePass == d.password) {
-					loadData();
-					modeSubmit = 'update';
-					location.reload();
-				} else {
-					alert("Password tidak sama!\nKetik ulang password anda");
+	// function untuk delete data users
+	function deleteDisabled(id) {
+		if (confirm("Are you sure to delete this data?")) {
+			$.ajax({
+				type : 'DELETE',
+				url : 'user/' + id,
+				success : function(d) {
+					showData();
+				},
+				error : function(d) {
+					console.log('Error');
 				}
-				//$('#modifiedBy').val(${sessionScope.id});
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk delete data user (is_delete == true)
-	function deleteDisabled() {
-		var data = getFormData($('#form-delete'));
-		$.ajax({
-			type : 'put',
-			url : 'user/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				loadDelete();
-				modeSubmit = 'update';
-				location.reload();
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk load pada saat edit
-	function loadEdit(id) {
-		$.ajax({
-			type : 'get',
-			url : 'user/' + id,
-			success : function(d) {
-				loadDataRole();
-				$('.modal-body #id').val(d.id);
-				$('.modal-body #roleId2').val(d.roleId);
-				$('.modal-body #password').val(d.password);
-				$('.modal-body #email').val(d.email);
-				$('.modal-body #username').val(d.username);
-				$('.modal-body #mobileFlag').val(d.mobileFlag);
-				$('.modal-body #mobileToken').val(d.mobileToken);
-				$('.modal-body #modifiedOn').val(datetime);
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk load pada saat reset
-	function loadReset(id) {
-		$.ajax({
-			type : 'get',
-			url : 'user/' + id,
-			success : function(d) {
-				loadDataRole();
-				$('.modal-body #id').val(d.id);
-				$('.modal-body #roleId3').val(d.roleId);
-				$('.modal-body #password').val(d.password);
-				$('.modal-body #email').val(d.email);
-				$('.modal-body #username').val(d.username);
-				$('.modal-body #mobileFlag').val(d.mobileFlag);
-				$('.modal-body #mobileToken').val(d.mobileToken);
-				$('.modal-body #modifiedOn').val(datetime);
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk load pada saat delete
-	function loadDelete(id) {
-		$.ajax({
-			type : 'get',
-			url : 'user/' + id,
-			success : function(d) {
-				loadDataRole();
-				$('.modal-body #id').val(d.id);
-				$('.modal-body #roleId4').val(d.roleId);
-				$('.modal-body #password').val(d.password);
-				$('.modal-body #email').val(d.email);
-				$('.modal-body #username').val(d.username);
-				$('.modal-body #mobileFlag').val(d.mobileFlag);
-				$('.modal-body #mobileToken').val(d.mobileToken);
-				$('.modal-body #deletedOn').val(datetime);
-				$('.modal-body #deleted').val(true);
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
-
-	// function untuk button cancel (reset data form)
-	function reset() {
-		location = 'user.html';
+			});
+		}
 	}
 
 	$(document).ready(function() {
-		loadData();
-		loadDataRole();
+		showRole();
+		showData();
 		tbUser = $('#tbUser').DataTable({
 			'searching' : false,
 			'lengthChange' : false,
@@ -285,7 +178,7 @@
 					<input type="text" id="search" class="form-control pull-right"
 						placeholder="Search by username/email">
 					<div class="input-group-btn">
-						<button type="button" class="btn btn-default" onclick="loadData()">
+						<button type="button" class="btn btn-default" onclick="showData()">
 							<i class="fa fa-search"></i>
 						</button>
 					</div>
@@ -293,7 +186,7 @@
 			</div>
 			<div class="col-xs-5">
 				<button type="button" class="btn btn-default pull-right hidden-xs"
-					data-toggle="modal" data-target="#modalAdd"
+					data-toggle="modal" data-target="#modal-add"
 					style="width: 30px; height: 30px; padding: 0px 0px">
 					<i class="fa fa-plus" style="font-size: 20px"></i>
 				</button>
@@ -307,7 +200,7 @@
 	<div class="row">
 		<div class="col-xs-6">
 			<!-- Modal -->
-			<div class="modal fade" id="modalAdd" role="dialog">
+			<div class="modal fade" id="modal-add" role="dialog">
 				<div class="modal-dialog">
 					<!-- Modal content-->
 					<div class="modal-content">
@@ -346,10 +239,10 @@
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal" onclick="reset()">Cancel</button>
+									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveAdd()">Save</button>
+									onclick="saveData('add')">Save</button>
 							</div>
 						</form>
 					</div>
@@ -386,7 +279,7 @@
 	<div class="row">
 		<div class="col-xs-6">
 			<!-- Modal -->
-			<div class="modal fade" id="modalEdit" role="dialog">
+			<div class="modal fade" id="modal-edit" role="dialog">
 				<div class="modal-dialog">
 					<!-- Modal content-->
 					<div class="modal-content">
@@ -399,11 +292,7 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="id">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="password"
-												id="password">
+											<input type="hidden" class="form-control" name="id" id="idEdit">
 										</div>
 										<div class="form-group">
 											<label>Role</label> <select
@@ -432,19 +321,15 @@
 											<label>Mobile Token</label> <input type="text"
 												class="form-control" name="mobileToken" id="mobileToken">
 										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="modifiedOn"
-												id="modifiedOn">
-										</div>
 									</div>
 								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal" onclick="reset()">Cancel</button>
+									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveEdit()">Save</button>
+									onclick="saveData('edit')">Save</button>
 							</div>
 						</form>
 					</div>
@@ -458,7 +343,7 @@
 	<div class="row">
 		<div class="col-xs-6">
 			<!-- Modal -->
-			<div class="modal fade" id="modalReset" role="dialog">
+			<div class="modal fade" id="modal-reset" role="dialog">
 				<div class="modal-dialog">
 					<!-- Modal content-->
 					<div class="modal-content">
@@ -466,26 +351,13 @@
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title">Reset Password</h4>
 						</div>
-						<form id="form-resetPass">
+						<form id="form-reset">
 							<div class="modal-body">
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="id">
+											<input type="hidden" class="form-control" name="id" id="idEdit">
 										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="roleId"
-												id="roleId3">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="email"
-												id="email">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="username"
-												id="username">
-										</div>
-
 										<div class="form-group">
 											<label>Password</label> <input type="text"
 												class="form-control" name="password" id="password">
@@ -494,19 +366,15 @@
 											<label>Re-type Password</label> <input type="text"
 												class="form-control" name="retypePass" id="retypePass">
 										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="modifiedOn"
-												id="modifiedOn">
-										</div>
 									</div>
 								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default"
-									data-dismiss="modal" onclick="reset()">Cancel</button>
+									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveReset()">Save</button>
+									onclick="saveData('reset')">Save</button>
 							</div>
 						</form>
 					</div>
@@ -516,69 +384,4 @@
 	</div>
 	<!-- End Modal Reset Password -->
 
-	<!-- Modal Delete User -->
-	<div class="row">
-		<div class="col-xs-3">
-			<!-- Modal -->
-			<div class="modal fade" id="modalDelete" role="dialog">
-				<div class="modal-dialog">
-					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Delete User</h4>
-						</div>
-
-						<div class="modal-body">
-							<form id="form-delete">
-								<div class="row">
-									<div class="col-xs-12">
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="id">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="roleId"
-												id="roleId4">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="email"
-												id="email">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="username"
-												id="username">
-										</div>
-
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="password"
-												id="password">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="deleted"
-												id="deleted">
-										</div>
-										<div class="form-group">
-											<input type="hidden" class="form-control" name="deletedOn"
-												id="deletedOn">
-										</div>
-									</div>
-								</div>
-							</form>
-							<p>Are you sure want to delete data?</p>
-						</div>
-
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default"
-								data-dismiss="modal" onclick="reset()">Cancel</button>
-							&nbsp;
-							<button type="button" class="btn btn-primary"
-								onclick="deleteDisabled()">Yes</button>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Modal Delete User -->
 </body>

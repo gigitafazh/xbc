@@ -29,8 +29,9 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         User currentUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         
         HttpSession session = request.getSession(true);
-        session.setAttribute("sessionUsername", currentUser.getUsername());
         session.setAttribute("sessionId", currentUser.getId());
+        session.setAttribute("sessionUsername", currentUser.getUsername());
+        session.setAttribute("sessionEmail", currentUser.getEmail());
         session.setAttribute("sessionRole", currentUser.getRole());
         
         super.onAuthenticationSuccess(request, response, authentication);
