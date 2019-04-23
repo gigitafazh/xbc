@@ -5,13 +5,13 @@ import java.util.Collection;
 import xbc.model.Office;
 
 public interface OfficeService {
-	public Office findOne(int id);
+	public Office findOne(Integer id);
 
 	public Collection<Office> findAll();
 
-	public void save(Office office, int sessionId);
+	public void save(Office office, Integer sessionId);
 	
-	public Office update(Office office, int sessionId);
+	public Office update(Office office, Integer sessionId);
 
 	public void delete(Office office);
 
@@ -19,5 +19,5 @@ public interface OfficeService {
 
 	public Collection<Office> search(String name);
 	
-	public Office deleteDisabled(int id, int sessionI);
+	public Office deleteDisabled(Integer id, Integer sessionI);
 }

@@ -6,13 +6,13 @@ import xbc.model.Menu;
 import xbc.model.Office;
 
 public interface MenuService {
-	public Menu findOne(int id);
+	public Menu findOne(Integer id);
 
 	public Collection<Menu> findAll();
 	
-	public void save(Menu menu);
+	public void save(Menu menu, Integer sessionId);
 
-	public Menu update(Menu menu);
+	public Menu update(Menu menu, Integer sessionId);
 
 	public void delete(Menu menu);
 
@@ -20,5 +20,5 @@ public interface MenuService {
 
 	public Collection<Menu> search(String title);
 	
-	public Menu deleteDisabled(int id);
+	public Menu deleteDisabled(Integer id, Integer sessionId);
 }

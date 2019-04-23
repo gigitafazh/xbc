@@ -5,7 +5,7 @@ import java.util.Collection;
 import xbc.model.User;
 
 public interface UserDao {
-	public User findOne(int id);
+	public User findOne(Integer id);
 
 	public Collection<User> findAll();
 

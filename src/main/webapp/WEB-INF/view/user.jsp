@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<meta charset="ISO-8859-1">
 <title>User</title>
 
 <head>
@@ -45,9 +50,10 @@
 			type : 'get',
 			url : url,
 			success : function(d) {
+				debugger;
 				tbUser.clear().draw();
 				$(d).each(function(index, element) {
-					if (element.deleted == false) {
+					if (element.isDelete == false) {
 						tbUser.row.add([
 							element.username,
 							element.role.name,
@@ -411,3 +417,4 @@
 	<!-- End Modal Reset Password -->
 
 </body>
+</html>

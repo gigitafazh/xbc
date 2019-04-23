@@ -16,9 +16,12 @@ import xbc.model.Role;
 public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private AuditLogService auditLogService;
 
 	@Override
-	public Role findOne(int id) {
+	public Role findOne(Integer id) {
 		return roleDao.findOne(id);
 	}
 
@@ -28,21 +31,30 @@ public class RoleServiceImpl implements RoleService {
 	}
 	
 	@Override
-	public void save(Role role) {
+	public void save(Role role, Integer sessionId) {
 		role.setCreatedOn(new Date());
-		role.setCreatedBy(0);
-		role.setDeleted(false);
+		role.setCreatedBy(sessionId);
+		role.setDelete(false);
 		roleDao.save(role);
+		
+		auditLogService.logInsert(auditLogService.objectToJsonString(role));
 	}
 
 	@Override
-	public Role update(Role newRole) {
+	public Role update(Role newRole, Integer sessionId) {
 		Role role = roleDao.findOne(newRole.getId());
+		
+		String jsonBefore = auditLogService.objectToJsonString(role);
+		
 		role.setCode(newRole.getCode());
 		role.setName(newRole.getName());
 		role.setDescription(newRole.getDescription());
-		role.setModifiedBy(0);
+		role.setModifiedBy(sessionId);
 		role.setModifiedOn(new Date());
+		
+		String jsonAfter = auditLogService.objectToJsonString(role);
+		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		
 		return roleDao.update(role);
 	}
 
@@ -52,7 +64,7 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(Integer id) {
 		roleDao.deleteById(id);
 	}
 
@@ -62,11 +74,14 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public Role deleteDisabled(int id) {
+	public Role deleteDisabled(Integer id, Integer sessionId) {
 		Role role = roleDao.findOne(id);
-		role.setDeletedBy(0);
+		role.setDeletedBy(sessionId);
 		role.setDeletedOn(new Date());
-		role.setDeleted(true);
+		role.setDelete(true);
+		
+		auditLogService.logDelete(auditLogService.objectToJsonString(role));
+		
 		return roleDao.update(role);
 	}
 }

@@ -26,7 +26,7 @@
 						$(d)
 								.each(
 										function(index, element) {
-											if (element.deleted == false) {
+											if (element.isDelete == false) {
 												tbOffice.row
 														.add(
 																[
@@ -69,7 +69,7 @@
 						$(d)
 								.each(
 										function(index, element) {
-											if (element.deleted == false) {
+											if (element.isDelete == false) {
 												tbOffice.row
 														.add(
 																[
@@ -133,7 +133,7 @@
 						$(d)
 								.each(
 										function(index, element) {
-											if (element.deleted == false) {
+											if (element.isDelete == false) {
 												tbRoom.row
 														.add(
 																[

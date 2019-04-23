@@ -25,7 +25,7 @@ public class OfficeController {
 	private OfficeService officeService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Office> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Office> findOne(@PathVariable("id") Integer id) {
 		Office office = officeService.findOne(id);
 
 		ResponseEntity<Office> result = new ResponseEntity<>(office, HttpStatus.OK);
@@ -50,7 +50,7 @@ public class OfficeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<Office> save(@RequestBody Office office, HttpSession session) {
-		officeService.save(office, (int) session.getAttribute("sessionId"));
+		officeService.save(office, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -58,7 +58,7 @@ public class OfficeController {
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<Office> update(@RequestBody Office office, HttpSession session) {
-		officeService.update(office, (int) session.getAttribute("sessionId"));
+		officeService.update(office, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -66,8 +66,8 @@ public class OfficeController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Office> deleteDisabled(@PathVariable("id") int id, HttpSession session) {
-		officeService.deleteDisabled(id, (int) session.getAttribute("sessionId"));
+	public ResponseEntity<Office> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
+		officeService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Office> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;

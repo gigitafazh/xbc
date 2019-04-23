@@ -5,7 +5,7 @@ import java.util.Collection;
 import xbc.model.MenuAccess;
 
 public interface MenuAccessDao {
-	public MenuAccess findOne(int id);
+	public MenuAccess findOne(Integer id);
 
 	public Collection<MenuAccess> findAll();
 
@@ -13,9 +13,9 @@ public interface MenuAccessDao {
 
 	public void delete(MenuAccess menuAccess);
 
-	public void deleteById(int id);
+	public void deleteById(Integer id);
 
 	public void save(MenuAccess menuAccess);
 	
-	public Collection<MenuAccess> search(int roleId);
+	public Collection<MenuAccess> search(Integer roleId);
 }

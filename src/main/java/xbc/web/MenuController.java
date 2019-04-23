@@ -2,6 +2,8 @@ package xbc.web;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ import xbc.model.Menu;
 import xbc.service.MenuService;
 
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("secure/menu")
 public class MenuController {
 
 	@Autowired
@@ -31,7 +33,7 @@ public class MenuController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Menu> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Menu> findOne(@PathVariable("id") Integer id) {
 		Menu menu = menuService.findOne(id);
 
 		ResponseEntity<Menu> result = new ResponseEntity<>(menu, HttpStatus.OK);
@@ -47,16 +49,16 @@ public class MenuController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<Menu> save(@RequestBody Menu menu) {
-		menuService.save(menu);
+	public ResponseEntity<Menu> save(@RequestBody Menu menu, HttpSession session) {
+		menuService.save(menu, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Menu> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<Menu> update(@RequestBody Menu menu) {
-		menuService.update(menu);
+	public ResponseEntity<Menu> update(@RequestBody Menu menu, HttpSession session) {
+		menuService.update(menu, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Menu> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -64,8 +66,8 @@ public class MenuController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Menu> deleteDisabled(@PathVariable("id") int id) {
-		menuService.deleteDisabled(id);
+	public ResponseEntity<Menu> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
+		menuService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Menu> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;

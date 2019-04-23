@@ -22,7 +22,7 @@ public class Role implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", length = 11, updatable = false, nullable = false)
-	private int id;
+	private Integer id;
 
 	@Column(name = "code", length = 50, nullable = false)
 	private String code;
@@ -34,7 +34,7 @@ public class Role implements Serializable {
 	private String description;
 
 	@Column(name = "created_by", length = 11, nullable = false)
-	private int createdBy;
+	private Integer createdBy;
 
 	@Column(name = "created_on", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -42,7 +42,7 @@ public class Role implements Serializable {
 	private Date createdOn;
 
 	@Column(name = "modified_by", length = 11, nullable = true)
-	private int modifiedBy;
+	private Integer modifiedBy;
 
 	@Column(name = "modified_on", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -50,21 +50,21 @@ public class Role implements Serializable {
 	private Date modifiedOn;
 
 	@Column(name = "deleted_by", length = 11, nullable = true)
-	private int deletedBy;
+	private Integer deletedBy;
 
 	@Column(name = "deleted_on", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Jakarta")
 	private Date deletedOn;
 
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
+	@Column(name = "is_delete", nullable = false)
+	private boolean isDelete;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -92,11 +92,11 @@ public class Role implements Serializable {
 		this.description = description;
 	}
 
-	public int getCreatedBy() {
+	public Integer getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(int createdBy) {
+	public void setCreatedBy(Integer createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -108,11 +108,11 @@ public class Role implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public int getModifiedBy() {
+	public Integer getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(int modifiedBy) {
+	public void setModifiedBy(Integer modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -124,11 +124,11 @@ public class Role implements Serializable {
 		this.modifiedOn = modifiedOn;
 	}
 
-	public int getDeletedBy() {
+	public Integer getDeletedBy() {
 		return deletedBy;
 	}
 
-	public void setDeletedBy(int deletedBy) {
+	public void setDeletedBy(Integer deletedBy) {
 		this.deletedBy = deletedBy;
 	}
 
@@ -140,11 +140,11 @@ public class Role implements Serializable {
 		this.deletedOn = deletedOn;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
+	public boolean isDelete() {
+		return isDelete;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void setDelete(boolean isDelete) {
+		this.isDelete = isDelete;
 	}
 }

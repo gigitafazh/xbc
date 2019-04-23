@@ -5,7 +5,7 @@ import java.util.Collection;
 import xbc.model.Office;
 
 public interface OfficeDao {
-	public Office findOne(int id);
+	public Office findOne(Integer id);
 
 	public Collection<Office> findAll();
 	

@@ -24,7 +24,7 @@ public class Room implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", length = 11, updatable = false, nullable = false)
-	private int id;
+	private Integer id;
 
 	@Column(name = "code", length = 50, nullable = false)
 	private String code;
@@ -33,7 +33,7 @@ public class Room implements Serializable {
 	private String name;
 
 	@Column(name = "capacity", length = 5, nullable = false)
-	private int capacity;
+	private Integer capacity;
 
 	@Column(name = "any_projector", nullable = false)
 	private boolean anyProjector;
@@ -42,14 +42,14 @@ public class Room implements Serializable {
 	private String notes;
 
 	@Column(name = "office_id", length = 11, nullable = false)
-	private int officeId;
+	private Integer officeId;
 
 	@ManyToOne
 	@JoinColumn(name = "office_id", updatable = false, insertable = false)
 	private Office office;
 
 	@Column(name = "created_by", length = 11, nullable = false)
-	private int createdBy;
+	private Integer createdBy;
 
 	@Column(name = "created_on", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -57,7 +57,7 @@ public class Room implements Serializable {
 	private Date createdOn;
 
 	@Column(name = "modified_by", length = 11, nullable = true)
-	private int modifiedBy;
+	private Integer modifiedBy;
 
 	@Column(name = "modified_on", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -65,21 +65,21 @@ public class Room implements Serializable {
 	private Date modifiedOn;
 
 	@Column(name = "deleted_by", length = 11, nullable = true)
-	private int deletedBy;
+	private Integer deletedBy;
 
 	@Column(name = "deleted_on", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss", timezone = "Asia/Jakarta")
 	private Date deletedOn;
 
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted;
+	@Column(name = "is_delete", nullable = false)
+	private boolean isDelete;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -99,11 +99,11 @@ public class Room implements Serializable {
 		this.name = name;
 	}
 
-	public int getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
 
@@ -123,11 +123,11 @@ public class Room implements Serializable {
 		this.notes = notes;
 	}
 
-	public int getOfficeId() {
+	public Integer getOfficeId() {
 		return officeId;
 	}
 
-	public void setOfficeId(int officeId) {
+	public void setOfficeId(Integer officeId) {
 		this.officeId = officeId;
 	}
 
@@ -139,11 +139,11 @@ public class Room implements Serializable {
 		this.office = office;
 	}
 
-	public int getCreatedBy() {
+	public Integer getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(int createdBy) {
+	public void setCreatedBy(Integer createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -155,11 +155,11 @@ public class Room implements Serializable {
 		this.createdOn = createdOn;
 	}
 
-	public int getModifiedBy() {
+	public Integer getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(int modifiedBy) {
+	public void setModifiedBy(Integer modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -171,11 +171,11 @@ public class Room implements Serializable {
 		this.modifiedOn = modifiedOn;
 	}
 
-	public int getDeletedBy() {
+	public Integer getDeletedBy() {
 		return deletedBy;
 	}
 
-	public void setDeletedBy(int deletedBy) {
+	public void setDeletedBy(Integer deletedBy) {
 		this.deletedBy = deletedBy;
 	}
 
@@ -187,11 +187,11 @@ public class Room implements Serializable {
 		this.deletedOn = deletedOn;
 	}
 
-	public boolean isDeleted() {
-		return deleted;
+	public boolean isDelete() {
+		return isDelete;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void setDelete(boolean isDelete) {
+		this.isDelete = isDelete;
 	}
 }

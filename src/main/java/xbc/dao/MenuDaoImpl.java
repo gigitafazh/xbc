@@ -23,4 +23,15 @@ public class MenuDaoImpl extends AbstractHibernateDao<Menu> implements MenuDao {
 		Collection<Menu> result = q.list();
 		return result;
 	}
+
+	@Override
+	public Collection<Menu> findAllByRole(Integer roleId) {
+		String hql = "u.* from t_menu_access m left join t_menu u" + 
+				"on (m.menu_id = u.id) where m.role_id =: roleId";
+		Query q = getCurrentSession().createQuery(hql);
+		q.setParameter("roleId", roleId);
+		
+		Collection<Menu> result = q.list();
+		return result;
+	}
 }

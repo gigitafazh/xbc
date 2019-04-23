@@ -5,7 +5,7 @@ import java.util.Collection;
 import xbc.model.Role;
 
 public interface RoleDao {
-	public Role findOne(int id);
+	public Role findOne(Integer id);
 
 	public Collection<Role> findAll();
 
@@ -15,7 +15,7 @@ public interface RoleDao {
 
 	public void delete(Role role);
 
-	public void deleteById(int id);
+	public void deleteById(Integer id);
 	
 	public Collection<Role> search(String name);
 }

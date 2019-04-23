@@ -19,6 +19,7 @@ import xbc.model.User;
 import xbc.service.UserService;
 
 @RestController
+//@PreAuthorize("hasAnyAuthority('user', 'admin')")
 @RequestMapping("secure/user")
 public class UserController {
 
@@ -26,7 +27,7 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<User> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<User> findOne(@PathVariable("id") Integer id) {
 		User user = userService.findOne(id);
 
 		ResponseEntity<User> result = new ResponseEntity<>(user, HttpStatus.OK);
@@ -51,7 +52,7 @@ public class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<User> save(@RequestBody User user, HttpSession session) {
-		userService.save(user, (int) session.getAttribute("sessionId"));
+		userService.save(user, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -59,7 +60,7 @@ public class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	public ResponseEntity<User> update(@RequestBody User user, HttpSession session) {
-		userService.update(user, (int) session.getAttribute("sessionId"));
+		userService.update(user, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -67,8 +68,8 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<User> deleteDisabled(@PathVariable("id") int id, HttpSession session) {
-		userService.deleteDisabled(id, (int) session.getAttribute("sessionId"));
+	public ResponseEntity<User> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
+		userService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;

@@ -15,9 +15,12 @@ import xbc.model.Room;
 public class RoomServiceImpl implements RoomService {
 	@Autowired
 	private RoomDao roomDao;
+	
+	@Autowired
+	private AuditLogService auditLogService;
 
 	@Override
-	public Room findOne(int id) {
+	public Room findOne(Integer id) {
 		return roomDao.findOne(id);
 	}
 
@@ -27,25 +30,34 @@ public class RoomServiceImpl implements RoomService {
 	}
 	
 	@Override
-	public void save(Room room) {
-		room.setCreatedBy(0);
+	public void save(Room room, Integer sessionId) {
+		room.setCreatedBy(sessionId);
 		room.setCreatedOn(new Date());
-		room.setDeleted(false);
+		room.setDelete(false);
 		room.setOfficeId(room.getOfficeId());
 		roomDao.save(room);
+		
+		auditLogService.logInsert(auditLogService.objectToJsonString(room));
 	}
 
 	@Override
-	public Room update(Room newRoom) {
+	public Room update(Room newRoom, Integer sessionId) {
 		Room room = roomDao.findOne(newRoom.getId());
+		
+		String jsonBefore = auditLogService.objectToJsonString(room);
+		
 		room.setCode(newRoom.getCode());
 		room.setName(newRoom.getName());
 		room.setCapacity(newRoom.getCapacity());
 		room.setAnyProjector(newRoom.isAnyProjector());
 		room.setNotes(newRoom.getNotes());
-		room.setModifiedBy(0);
+		room.setModifiedBy(sessionId);
 		room.setModifiedOn(new Date());
 		room.setOfficeId(newRoom.getOfficeId());
+		
+		String jsonAfter = auditLogService.objectToJsonString(room);
+		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		
 		return roomDao.update(room);
 	}
 
@@ -60,11 +72,14 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public Room deleteDisabled(int id) {
+	public Room deleteDisabled(Integer id, Integer sessionId) {
 		Room room = roomDao.findOne(id);
-		room.setDeletedBy(0);
+		room.setDeletedBy(sessionId);
 		room.setDeletedOn(new Date());
-		room.setDeleted(true);
+		room.setDelete(true);
+		
+		auditLogService.logDelete(auditLogService.objectToJsonString(room));
+		
 		return roomDao.update(room);
 	}
 }

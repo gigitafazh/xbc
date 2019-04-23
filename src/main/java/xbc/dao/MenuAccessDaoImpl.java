@@ -17,7 +17,7 @@ public class MenuAccessDaoImpl extends AbstractHibernateDao<MenuAccess> implemen
 	}
 
 	@Override
-	public Collection<MenuAccess> search(final int roleId) {
+	public Collection<MenuAccess> search(final Integer roleId) {
 		String hql = "FROM MenuAccess M WHERE M.roleId = :roleId";
 		Query q = getCurrentSession().createQuery(hql);
 		q.setParameter("roleId", roleId);

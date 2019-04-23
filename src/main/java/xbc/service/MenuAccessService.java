@@ -5,17 +5,17 @@ import java.util.Collection;
 import xbc.model.MenuAccess;
 
 public interface MenuAccessService {
-	public MenuAccess findOne(int id);
+	public MenuAccess findOne(Integer id);
 
 	public Collection<MenuAccess> findAll();
 	
-	public void save(MenuAccess menuAccess);
+	public void save(MenuAccess menuAccess, Integer sessionId);
 
-	public MenuAccess update(MenuAccess menuAccess);
+	public MenuAccess update(MenuAccess menuAccess, Integer sessionId);
 
 	public void delete(MenuAccess menuAccess);
 
-	public void deleteById(int id);
+	public void deleteById(Integer id);
 
-	public Collection<MenuAccess> search(int roleId);
+	public Collection<MenuAccess> search(Integer roleId);
 }

@@ -15,5 +15,6 @@
 	      <mapping class="xbc.model.Room"/>
 	      <mapping class="xbc.model.Menu"/>
 	      <mapping class="xbc.model.MenuAccess"/>
+	      <mapping class="xbc.model.AuditLog"/>
 	</session-factory>
 </hibernate-configuration>

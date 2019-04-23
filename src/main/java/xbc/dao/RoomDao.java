@@ -5,7 +5,7 @@ import java.util.Collection;
 import xbc.model.Room;
 
 public interface RoomDao {
-	public Room findOne(int id);
+	public Room findOne(Integer id);
 
 	public Collection<Room> findAll();
 	

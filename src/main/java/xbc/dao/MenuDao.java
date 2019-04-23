@@ -5,9 +5,11 @@ import java.util.Collection;
 import xbc.model.Menu;
 
 public interface MenuDao {
-	public Menu findOne(int id);
+	public Menu findOne(Integer id);
 
 	public Collection<Menu> findAll();
+	
+	public Collection<Menu> findAllByRole(Integer roleId);
 	
 	public void save(Menu menu);
 

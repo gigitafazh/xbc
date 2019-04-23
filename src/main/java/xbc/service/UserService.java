@@ -5,13 +5,13 @@ import java.util.Collection;
 import xbc.model.User;
 
 public interface UserService {
-	public User findOne(int id);
+	public User findOne(Integer id);
 
 	public Collection<User> findAll();
 	
-	public void save(User user, int id);
+	public void save(User user, Integer sessionId);
 
-	public User update(User user, int id);
+	public User update(User user, Integer sessionId);
 
 	public void delete(User user);
 
@@ -21,5 +21,5 @@ public interface UserService {
 	
 	public User findByUsername(String name);
 	
-	public User deleteDisabled(int id, int sessionId);
+	public User deleteDisabled(Integer id, Integer sessionId);
 }

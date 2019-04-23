@@ -2,6 +2,8 @@ package xbc.web;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +26,7 @@ public class RoleController {
 	private RoleService roleService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Role> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Role> findOne(@PathVariable("id") Integer id) {
 		Role role = roleService.findOne(id);
 
 		ResponseEntity<Role> result = new ResponseEntity<>(role, HttpStatus.OK);
@@ -48,16 +50,16 @@ public class RoleController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<Role> save(@RequestBody Role role) {
-		roleService.save(role);
+	public ResponseEntity<Role> save(@RequestBody Role role, HttpSession session) {
+		roleService.save(role, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Role> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<Role> update(@RequestBody Role role) {
-		roleService.update(role);
+	public ResponseEntity<Role> update(@RequestBody Role role, HttpSession session) {
+		roleService.update(role, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Role> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -65,8 +67,8 @@ public class RoleController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Role> deleteDisabled(@PathVariable("id") int id) {
-		roleService.deleteDisabled(id);
+	public ResponseEntity<Role> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
+		roleService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Role> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;

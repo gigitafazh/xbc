@@ -15,9 +15,12 @@ import xbc.model.Office;
 public class OfficeServiceImpl implements OfficeService {
 	@Autowired
 	private OfficeDao officeDao;
+	
+	@Autowired
+	private AuditLogService auditLogService;
 
 	@Override
-	public Office findOne(int id) {
+	public Office findOne(Integer id) {
 		return officeDao.findOne(id);
 	}
 
@@ -27,16 +30,21 @@ public class OfficeServiceImpl implements OfficeService {
 	}
 
 	@Override
-	public void save(Office office, int sessionId) {
+	public void save(Office office, Integer sessionId) {
 		office.setCreatedOn(new Date());
 		office.setCreatedBy(sessionId);
-		office.setDeleted(false);
+		office.setDelete(false);
 		officeDao.save(office);
+		
+		auditLogService.logInsert(auditLogService.objectToJsonString(office));
 	}
 
 	@Override
-	public Office update(Office newOffice, int sessionId) {
+	public Office update(Office newOffice, Integer sessionId) {
 		Office office = officeDao.findOne(newOffice.getId());
+		
+		String jsonBefore = auditLogService.objectToJsonString(office);
+		
 		office.setName(newOffice.getName());
 		office.setPhone(newOffice.getPhone());
 		office.setEmail(newOffice.getEmail());
@@ -44,6 +52,10 @@ public class OfficeServiceImpl implements OfficeService {
 		office.setNotes(newOffice.getNotes());
 		office.setModifiedBy(sessionId);
 		office.setModifiedOn(new Date());
+		
+		String jsonAfter = auditLogService.objectToJsonString(office);
+		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		
 		return officeDao.update(office);
 	}
 
@@ -63,11 +75,14 @@ public class OfficeServiceImpl implements OfficeService {
 	}
 
 	@Override
-	public Office deleteDisabled(int id, int sessionId) {
+	public Office deleteDisabled(Integer id, Integer sessionId) {
 		Office office = officeDao.findOne(id);
 		office.setDeletedBy(sessionId);
 		office.setDeletedOn(new Date());
-		office.setDeleted(true);
+		office.setDelete(true);
+		
+		auditLogService.logDelete(auditLogService.objectToJsonString(office));
+		
 		return officeDao.update(office);
 	}
 }

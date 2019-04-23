@@ -16,9 +16,12 @@ import xbc.model.Office;
 public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuDao menuDao;
+	
+	@Autowired
+	private AuditLogService auditLogService;
 
 	@Override
-	public Menu findOne(int id) {
+	public Menu findOne(Integer id) {
 		return menuDao.findOne(id);
 	}
 
@@ -28,16 +31,21 @@ public class MenuServiceImpl implements MenuService {
 	}
 	
 	@Override
-	public void save(Menu menu) {
+	public void save(Menu menu, Integer sessionId) {
 		menu.setCreatedOn(new Date());
-		menu.setCreatedBy(0);
-		menu.setDeleted(false);
+		menu.setCreatedBy(sessionId);
+		menu.setDelete(false);
 		menuDao.save(menu);
+		
+		auditLogService.logInsert(auditLogService.objectToJsonString(menu));
 	}
 
 	@Override
-	public Menu update(Menu newMenu) {
+	public Menu update(Menu newMenu, Integer sessionId) {
 		Menu menu = menuDao.findOne(newMenu.getId());
+		
+		String jsonBefore = auditLogService.objectToJsonString(menu);
+		
 		menu.setCode(newMenu.getCode());
 		menu.setTitle(newMenu.getTitle());
 		menu.setDescription(newMenu.getDescription());
@@ -45,8 +53,12 @@ public class MenuServiceImpl implements MenuService {
 		menu.setMenuOrder(newMenu.getMenuOrder());
 		menu.setMenuParent(newMenu.getMenuParent());
 		menu.setMenuUrl(newMenu.getMenuUrl());
-		menu.setModifiedBy(0);
+		menu.setModifiedBy(sessionId);
 		menu.setModifiedOn(new Date());
+		
+		String jsonAfter = auditLogService.objectToJsonString(menu);
+		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		
 		return menuDao.update(menu);
 	}
 
@@ -66,11 +78,14 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public Menu deleteDisabled(int id) {
+	public Menu deleteDisabled(Integer id, Integer sessionId) {
 		Menu menu = menuDao.findOne(id);
-		menu.setDeletedBy(0);
+		menu.setDeletedBy(sessionId);
 		menu.setDeletedOn(new Date());
-		menu.setDeleted(true);
+		menu.setDelete(true);
+		
+		auditLogService.logDelete(auditLogService.objectToJsonString(menu));
+		
 		return menuDao.update(menu);
 	}
 }

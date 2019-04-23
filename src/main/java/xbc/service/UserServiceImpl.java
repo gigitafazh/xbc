@@ -15,9 +15,12 @@ import xbc.model.User;
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private AuditLogService auditLogService;
 
 	@Override
-	public User findOne(int id) {
+	public User findOne(Integer id) {
 		return userDao.findOne(id);
 	}
 
@@ -27,16 +30,21 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void save(User user, int sessionId) {
+	public void save(User user, Integer sessionId) {
 		user.setCreatedOn(new Date());
 		user.setCreatedBy(sessionId);
-		user.setDeleted(false);
+		user.setDelete(false);
 		userDao.save(user);
+		
+		auditLogService.logInsert(auditLogService.objectToJsonString(user));
 	}
 
 	@Override
-	public User update(User newUser, int sessionId) {
+	public User update(User newUser, Integer sessionId) {
 		User user = userDao.findOne(newUser.getId());
+		
+		String jsonBefore = auditLogService.objectToJsonString(user);
+		
 		user.setUsername(newUser.getUsername());
 		user.setEmail(newUser.getEmail());
 		user.setRole(newUser.getRole());
@@ -45,6 +53,10 @@ public class UserServiceImpl implements UserService {
 		user.setMobileToken(newUser.getMobileToken());
 		user.setModifiedOn(new Date());
 		user.setModifiedBy(sessionId);
+		
+		String jsonAfter = auditLogService.objectToJsonString(user);
+		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		
 		return userDao.update(user);
 	}
 
@@ -69,11 +81,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User deleteDisabled(int id, int sessionId) {
+	public User deleteDisabled(Integer id, Integer sessionId) {
 		User user = userDao.findOne(id);
 		user.setDeletedBy(sessionId);
 		user.setDeletedOn(new Date());
-		user.setDeleted(true);
+		user.setDelete(true);
+		
+		auditLogService.logDelete(auditLogService.objectToJsonString(user));
+		
 		return userDao.update(user);
 	}
 }

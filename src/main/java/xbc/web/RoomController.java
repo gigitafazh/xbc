@@ -2,6 +2,8 @@ package xbc.web;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class RoomController {
 	private RoomService roomService;
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Room> findOne(@PathVariable("id") int id) {
+	public ResponseEntity<Room> findOne(@PathVariable("id") Integer id) {
 		Room room = roomService.findOne(id);
 
 		ResponseEntity<Room> result = new ResponseEntity<>(room, HttpStatus.OK);
@@ -39,16 +41,16 @@ public class RoomController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<Room> save(@RequestBody Room room) {
-		roomService.save(room);
+	public ResponseEntity<Room> save(@RequestBody Room room, HttpSession session) {
+		roomService.save(room, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Room> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
-	public ResponseEntity<Room> update(@RequestBody Room room) {
-		roomService.update(room);
+	public ResponseEntity<Room> update(@RequestBody Room room, HttpSession session) {
+		roomService.update(room, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Room> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
@@ -56,8 +58,8 @@ public class RoomController {
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Room> deleteDisabled(@PathVariable("id") int id) {
-		roomService.deleteDisabled(id);
+	public ResponseEntity<Room> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
+		roomService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
 
 		ResponseEntity<Room> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
