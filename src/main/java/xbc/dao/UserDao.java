@@ -19,5 +19,7 @@ public interface UserDao {
 	
 	public User findByUsername(String username);
 	
+	public Collection<User> findByEmail(String email);
+	
 	public Collection<User> search(String find);
 }

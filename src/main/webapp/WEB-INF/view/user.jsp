@@ -49,11 +49,14 @@
 		$.ajax({
 			type : 'get',
 			url : url,
+			data : {
+				email : $('#search').val()
+			},
 			success : function(d) {
 				debugger;
 				tbUser.clear().draw();
 				$(d).each(function(index, element) {
-					if (element.isDelete == false) {
+					
 						tbUser.row.add([
 							element.username,
 							element.role.name,
@@ -72,7 +75,7 @@
 							+ '</ul></div>',
 							element.id ])
 						.draw();
-					}
+					
 				});
 			},
 		});
@@ -103,7 +106,10 @@
 	
 	// function untuk save data user
 	function saveData(tipe) {
+
+
 		var method;
+		
 		if (tipe == 'add') {
 			var data = getFormData($('#form-add'));
 			$('#modal-add').modal('hide');
@@ -117,24 +123,37 @@
 			$('#modal-reset').modal('hide');
 			method = 'PUT';
 		}
-		$.ajax({
-			type : method,
-			url : 'user/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				showData();
-				if (d.retypePass == d.password) {
-					$('#form-reset input[name=password]').val(d.password);
-				} else {
-					alert("Password tidak sama.\nKetik ulang password Anda!");
+		if(data.password == data.retypePass){
+			$.ajax({
+				type : method,
+				url : 'user/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					debugger;
+					showData();
+					if (d == 1) {
+						alert("Email sudah terdaftar!");
+						$('#form-add input[name=email]').trigger('reset');
+					} else if (d == 2) {
+						alert("Username sudah terdaftar");
+						$('#form-add input[name=username]').trigger("reset");
+					} else if (d == 3){
+						alert("Data successfully saved!");
+					}
+					modeSubmit = 'insert';
+				},
+				error : function(d) {
+					console.log('Error');
 				}
-				modeSubmit = 'insert';
-			},
-			error : function(d) {
-				console.log('Error');
+			});
+
 			}
-		});
+		else {
+			alert("Password tidak sama.\nKetik ulang password Anda!");
+			$('#form-add input[name=retypePass]').trigger('reset');
+			$('#form-reset input[name=retypePass]').trigger('reset');
+		}
 	}
 
 	// function untuk delete data users
@@ -145,6 +164,7 @@
 				url : 'user/' + id,
 				success : function(d) {
 					showData();
+					alert("Data successfully deleted!");
 				},
 				error : function(d) {
 					console.log('Error');

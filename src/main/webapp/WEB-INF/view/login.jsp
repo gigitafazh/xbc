@@ -96,7 +96,6 @@
 	<script
 		src="${pageContext.request.contextPath}/assets/js/icheck.min.js"></script>
 	<script>
-		<script>
 		$(function() {
 			$('input').iCheck({
 				checkboxClass : 'icheckbox_square-blue',

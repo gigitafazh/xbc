@@ -17,6 +17,7 @@
 		<intercept-url pattern="/index" access="permitAll()" />
 		<intercept-url pattern="/assets/**" access="permitAll()" />
 		<intercept-url pattern="/login" access="permitAll()" />
+		<intercept-url pattern="/forgot-password" access="permitAll()" />
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 
 		<!-- access denied page -->

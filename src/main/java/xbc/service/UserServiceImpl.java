@@ -30,13 +30,28 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void save(User user, Integer sessionId) {
+	public Integer save(User user, Integer sessionId) {
 		user.setCreatedOn(new Date());
 		user.setCreatedBy(sessionId);
 		user.setDelete(false);
-		userDao.save(user);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(user));
+		Integer countUsername = this.checkUsername(user.getUsername());
+		Integer countEmail = this.checkEmail(user.getEmail());
+		
+		if (countEmail > 0) {
+			user.setEmail(user.getEmail());
+			return 1;
+		} else {
+			if (countUsername > 0) {
+				user.setUsername(user.getUsername());
+				return 2;
+			} else {
+				userDao.save(user);
+				return 3;
+			}
+		}
+		//auditLogService.logInsert(auditLogService.objectToJsonString(user));
+		
 	}
 
 	@Override
@@ -79,6 +94,11 @@ public class UserServiceImpl implements UserService {
 	public User findByUsername(String username) {
 		return userDao.findByUsername(username);
 	}
+	
+	@Override
+	public Collection<User> findByEmail(String email) {
+		return userDao.findByEmail(email);
+	}
 
 	@Override
 	public User deleteDisabled(Integer id, Integer sessionId) {
@@ -90,5 +110,27 @@ public class UserServiceImpl implements UserService {
 		auditLogService.logDelete(auditLogService.objectToJsonString(user));
 		
 		return userDao.update(user);
+	}
+	
+	public Integer checkEmail(String email) {
+		Collection<User> list = userDao.findByEmail(email);
+		Integer countEmail = 0;
+		if (list == null) {
+			countEmail = 0;
+		} else {
+			countEmail = list.size();
+		}
+		return countEmail;
+	}
+	
+	public Integer checkUsername(String username) {
+		User list = userDao.findByUsername(username);
+		Integer countUsername = 0;
+		if (list == null) {
+			countUsername = 0;
+		} else {
+			countUsername = 1;
+		}
+		return countUsername;
 	}
 }

@@ -101,7 +101,7 @@
 								<img
 								src="${pageContext.request.contextPath}/assets/img/photo2.png"
 								class="user-image" alt="User Image"> <!-- hidden-xs hides the username on small devices so only the image appears. -->
-								<span class="hidden-xs">${sessionScope.sessionUsername}</span>
+								<span class="hidden-xs">${sessionScope.username}</span>
 						</a>
 							<ul class="dropdown-menu">
 								<!-- The user image in the menu -->
@@ -109,7 +109,8 @@
 									src="${pageContext.request.contextPath}/assets/img/photo2.png"
 									class="img-circle" alt="User Image">
 
-									<p>${sessionScope.sessionUsername} <small>${sessionScope.sessionRole}</small>
+									<p>
+										${sessionScope.username} <small>${sessionScope.role}</small>
 									</p></li>
 								<!-- Menu Footer-->
 								<li class="user-footer">

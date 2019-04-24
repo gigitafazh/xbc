@@ -33,7 +33,7 @@ public class UserController {
 		ResponseEntity<User> result = new ResponseEntity<>(user, HttpStatus.OK);
 		return result;
 	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Collection<User>> findAll() {
 		Collection<User> list = userService.findAll();
@@ -51,11 +51,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public ResponseEntity<User> save(@RequestBody User user, HttpSession session) {
-		userService.save(user, (Integer) session.getAttribute("sessionId"));
+	public Integer save(@RequestBody User user, HttpSession session) {
+		Integer hasil =  userService.save(user, (Integer) session.getAttribute("sessionId"));
 
-		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
-		return result;
+		//ResponseEntity<User> result = new ResponseEntity<>(hasil,HttpStatus.OK);
+		return hasil;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
@@ -66,7 +66,7 @@ public class UserController {
 		return result;
 
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<User> deleteDisabled(@PathVariable("id") Integer id, HttpSession session) {
 		userService.deleteDisabled(id, (Integer) session.getAttribute("sessionId"));
