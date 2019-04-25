@@ -9,7 +9,7 @@ public interface MenuDao {
 
 	public Collection<Menu> findAll();
 	
-	public Collection<Menu> findAllByRole(Integer roleId);
+	public Collection<Menu> findAllByRole(Integer sessionRoleId);
 	
 	public void save(Menu menu);
 

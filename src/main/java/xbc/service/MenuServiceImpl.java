@@ -37,7 +37,7 @@ public class MenuServiceImpl implements MenuService {
 		menu.setDelete(false);
 		menuDao.save(menu);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(menu));
+		auditLogService.logInsert(auditLogService.objectToJsonString(menu), sessionId);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
 		menu.setModifiedOn(new Date());
 		
 		String jsonAfter = auditLogService.objectToJsonString(menu);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return menuDao.update(menu);
 	}
@@ -84,8 +84,13 @@ public class MenuServiceImpl implements MenuService {
 		menu.setDeletedOn(new Date());
 		menu.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(menu));
+		auditLogService.logDelete(auditLogService.objectToJsonString(menu), sessionId);
 		
 		return menuDao.update(menu);
+	}
+
+	@Override
+	public Collection<Menu> findAllByRole(Integer sessionRoleId) {
+		return menuDao.findAllByRole(sessionRoleId);
 	}
 }

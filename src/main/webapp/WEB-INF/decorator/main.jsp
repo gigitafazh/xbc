@@ -69,6 +69,30 @@
 <!-- AdminLTE App -->
 <script
 	src="${pageContext.request.contextPath}/assets/js/adminlte.min.js"></script>
+<!-- Notify Js -->
+<script
+	src="${pageContext.request.contextPath}/assets/js/notify.min.js"></script>
+
+<script>
+	// function untuk show data
+	function showMenu() {
+		var roleId = ${sessionScope.sessionRole.id}
+		$.ajax({
+			type : 'get',
+			url : 'menu/find/' + roleId,
+			success : function(d) {
+				$(d).each(function(index, item) {
+					var menu = '<li><a href="${pageContext.request.contextPath}/'+ item[7] +'"><i class="fa fa-tags"></i> <span>'+ item[2] +'</span></a></li>';
+					$("#menuku").append(menu);
+				});
+			}
+		});
+	}
+
+	$(document).ready(function() {
+		showMenu();
+	});
+</script>
 
 <decorator:head></decorator:head>
 
@@ -109,7 +133,7 @@
 									src="${pageContext.request.contextPath}/assets/img/photo2.png"
 									class="img-circle" alt="User Image">
 
-									<p>${sessionScope.sessionUsername} <small>${sessionScope.sessionRole}</small>
+									<p>${sessionScope.sessionUsername} <small>${sessionScope.sessionRole.name}</small>
 									</p></li>
 								<!-- Menu Footer-->
 								<li class="user-footer">
@@ -134,16 +158,15 @@
 			<section class="sidebar">
 
 				<!-- Sidebar Menu -->
-				<ul class="sidebar-menu" data-widget="tree">
-					<li class="header">MASTER MENU</li>
+				<ul class="sidebar-menu" data-widget="tree" id="menuku">
+					<!-- <li class="header">MASTER MENU</li>
 					<li><a href="${pageContext.request.contextPath}/secure/user"><i
 							class="fa fa-address-book"></i> <span>User</span></a></li>
 					<li><a href="${pageContext.request.contextPath}/secure/office"><i
 							class="fa fa-building"></i> <span>Office</span></a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/secure/menu-access"><i
+					<li><a href="${pageContext.request.contextPath}/secure/menu-access"><i
 							class="fa fa-tags"></i> <span>Menu Access</span></a></li>
-					<li class="header">TRANSACTIONAL MENU</li>
+					<li class="header">TRANSACTIONAL MENU</li>  -->
 				</ul>
 				<!-- /.sidebar-menu -->
 			</section>

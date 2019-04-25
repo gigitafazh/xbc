@@ -2,9 +2,6 @@
 
 <head>
 <script>
-	var tbOffice;
-	var tbRoom;
-
 	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
@@ -52,6 +49,8 @@
 
 	// function untuk show data menu access
 	function showMenuAccess() {
+		$("#menuId option[value='defMenu']").prop('selected', true);
+		$("#roleId option[value='defRole']").prop('selected', true);
 		$.ajax({
 			type : 'get',
 			url : 'menu-access/',
@@ -123,6 +122,8 @@
 
 	// function untuk save data menu access
 	function saveMenuAccess() {
+		$("#menuId option[value='defMenu']").prop('selected', true);
+		$("#roleId option[value='defRole']").prop('selected', true);
 		var unindexed_data = $('#form-menu-access').serializeArray();
 		var data = {};
 		$.map(unindexed_data, function(n, i) {

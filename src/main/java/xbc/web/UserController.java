@@ -52,10 +52,10 @@ public class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public Integer save(@RequestBody User user, HttpSession session) {
-		Integer hasil =  userService.save(user, (Integer) session.getAttribute("sessionId"));
+		Integer result =  userService.save(user, (Integer) session.getAttribute("sessionId"));
 
 		//ResponseEntity<User> result = new ResponseEntity<>(hasil,HttpStatus.OK);
-		return hasil;
+		return result;
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.PUT)

@@ -37,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
 		role.setDelete(false);
 		roleDao.save(role);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(role));
+		auditLogService.logInsert(auditLogService.objectToJsonString(role), sessionId);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
 		role.setModifiedOn(new Date());
 		
 		String jsonAfter = auditLogService.objectToJsonString(role);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return roleDao.update(role);
 	}
@@ -80,7 +80,7 @@ public class RoleServiceImpl implements RoleService {
 		role.setDeletedOn(new Date());
 		role.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(role));
+		auditLogService.logDelete(auditLogService.objectToJsonString(role), sessionId);
 		
 		return roleDao.update(role);
 	}

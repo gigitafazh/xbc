@@ -18,16 +18,16 @@ import xbc.model.Menu;
 import xbc.service.MenuService;
 
 @RestController
-@RequestMapping("secure/menu")
+@RequestMapping("/secure/menu")
 public class MenuController {
 
 	@Autowired
 	private MenuService menuService;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Menu>> findAll() {
-		Collection<Menu> list = menuService.findAll();
-
+	@RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Menu>> findAll(@PathVariable("id") Integer id) {
+		Collection<Menu> list = menuService.findAllByRole(id);
+		//Collection<Menu> list = menuService.findAll();
 		ResponseEntity<Collection<Menu>> result = new ResponseEntity<>(list, HttpStatus.OK);
 		return result;
 	}

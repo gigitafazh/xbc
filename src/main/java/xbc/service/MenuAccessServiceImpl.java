@@ -35,7 +35,7 @@ public class MenuAccessServiceImpl implements MenuAccessService {
 		menuAccess.setCreatedBy(sessionId);
 		menuAccessDao.save(menuAccess);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(menuAccess));
+		auditLogService.logInsert(auditLogService.objectToJsonString(menuAccess), sessionId);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class MenuAccessServiceImpl implements MenuAccessService {
 		String jsonBefore = auditLogService.objectToJsonString(menuAccess);
 		
 		String jsonAfter = auditLogService.objectToJsonString(menuAccess);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return menuAccessDao.update(menuAccess);
 	}

@@ -37,7 +37,7 @@ public class RoomServiceImpl implements RoomService {
 		room.setOfficeId(room.getOfficeId());
 		roomDao.save(room);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(room));
+		auditLogService.logInsert(auditLogService.objectToJsonString(room), sessionId);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class RoomServiceImpl implements RoomService {
 		room.setOfficeId(newRoom.getOfficeId());
 		
 		String jsonAfter = auditLogService.objectToJsonString(room);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return roomDao.update(room);
 	}
@@ -78,7 +78,7 @@ public class RoomServiceImpl implements RoomService {
 		room.setDeletedOn(new Date());
 		room.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(room));
+		auditLogService.logDelete(auditLogService.objectToJsonString(room), sessionId);
 		
 		return roomDao.update(room);
 	}

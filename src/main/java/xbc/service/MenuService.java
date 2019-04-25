@@ -10,6 +10,8 @@ public interface MenuService {
 
 	public Collection<Menu> findAll();
 	
+	public Collection<Menu> findAllByRole(Integer sessionRoleId);
+	
 	public void save(Menu menu, Integer sessionId);
 
 	public Menu update(Menu menu, Integer sessionId);

@@ -16,85 +16,68 @@
 
 	// function untuk show data office
 	function showOffice() {
-		$
-				.ajax({
-					type : 'get',
-					url : 'office/',
-
-					success : function(d) {
-						tbOffice.clear().draw();
-						$(d)
-								.each(
-										function(index, element) {
-											if (element.isDelete == false) {
-												tbOffice.row
-														.add(
-																[
-																		element.name,
-																		element.phone,
-																		'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-																				+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-																				+ '<li><a href="javascript:void(0)" onclick="loadOffice('
-																				+ element.id
-																				+ ')">Edit</a></li>'
-																				+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
-																				+ element.id
-																				+ ')">Delete</a></li>'
-																				+ '</ul></div>',
-																		element.email,
-																		element.address,
-																		element.notes,
-																		element.id ])
-														.draw();
-											}
-											$('#officeId').val(element.id);
-										});
-
-					}
+		$.ajax({
+			type : 'get',
+			url : 'office/',
+			success : function(d) {
+				tbOffice.clear().draw();
+					$(d).each(function(index, element) {
+						tbOffice.row.add([
+							element.name,
+							element.phone,
+							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+							+ '<li><a href="javascript:void(0)" onclick="loadOffice('
+							+ element.id
+							+ ')">Edit</a></li>'
+							+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
+							+ element.id
+							+ ')">Delete</a></li>'
+							+ '</ul></div>',
+							element.email,
+							element.address,
+							element.notes,
+							element.id 
+						]).draw();
+					$('#officeId').val(element.id);
 				});
+			}
+		});
 	}
 
 	// function untuk search data office
 	function searchOffice() {
-		$
-				.ajax({
-					type : 'get',
-					url : 'office/search/',
-					data : {
-						name : $('#search').val()
-					},
-
-					success : function(d) {
-						tbOffice.clear().draw();
-						$(d)
-								.each(
-										function(index, element) {
-											if (element.isDelete == false) {
-												tbOffice.row
-														.add(
-																[
-																		element.name,
-																		element.phone,
-																		'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-																				+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-																				+ '<li><a href="javascript:void(0)" onclick="loadOffice('
-																				+ element.id
-																				+ ')">Edit</a></li>'
-																				+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
-																				+ element.id
-																				+ ')">Delete</a></li>'
-																				+ '</ul></div>',
-																		element.email,
-																		element.address,
-																		element.notes,
-																		element.id ])
-														.draw();
-											}
-											$('#officeId').val(element.id);
-										});
-
+		$.ajax({
+			type : 'get',
+			url : 'office/search/',
+			data : {
+				name : $('#search').val()
+			},
+			success : function(d) {
+				tbOffice.clear().draw();
+					$(d).each(function(index, element) {
+						tbOffice.row.add([
+							element.name,
+							element.phone,
+							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+							+ '<li><a href="javascript:void(0)" onclick="loadOffice('
+							+ element.id
+							+ ')">Edit</a></li>'
+							+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
+							+ element.id
+							+ ')">Delete</a></li>'
+							+ '</ul></div>',
+							element.email,
+							element.address,
+							element.notes,
+							element.id 
+						]).draw();
 					}
+					$('#officeId').val(element.id);
 				});
+			}
+		});
 	}
 
 	// function untuk load data office
@@ -123,41 +106,34 @@
 
 	// function untuk show data room
 	function showRoom() {
-		$
-				.ajax({
-					type : 'get',
-					url : 'room/',
-					
-					success : function(d) {
-						tbRoom.clear().draw();
-						$(d)
-								.each(
-										function(index, element) {
-											if (element.isDelete == false) {
-												tbRoom.row
-														.add(
-																[
-																		element.code,
-																		element.name,
-																		element.capacity,
-																		'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-																				+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-																				+ '<li><a href="javascript:void(0)" onclick="loadRoom('
-																				+ element.id
-																				+ ')">Edit</a></li>'
-																				+ '<li><a href="javascript:void(0)" onclick="deleteRoom('
-																				+ element.id
-																				+ ')">Delete</a></li>'
-																				+ '</ul></div>',
-																		element.anyProjector,
-																		element.notes,
-																		element.officeId,
-																		element.id ])
-														.draw();
-											}
-										});
+		$.ajax({
+			type : 'get',
+			url : 'room/',
+			success : function(d) {
+				tbRoom.clear().draw();
+					$(d).each(function(index, element) {
+						tbRoom.row.add([
+							element.code,
+							element.name,
+							element.capacity,
+							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+							+ '<li><a href="javascript:void(0)" onclick="loadRoom('
+							+ element.id
+							+ ')">Edit</a></li>'
+							+ '<li><a href="javascript:void(0)" onclick="deleteRoom('
+							+ element.id
+							+ ')">Delete</a></li>'
+							+ '</ul></div>',
+							element.anyProjector,
+							element.notes,
+							element.officeId,
+							element.id
+						]).draw();
 					}
 				});
+			}
+		});
 	}
 
 	// function untuk load data room

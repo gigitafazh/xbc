@@ -47,11 +47,10 @@ public class UserServiceImpl implements UserService {
 				return 2;
 			} else {
 				userDao.save(user);
+				auditLogService.logInsert(auditLogService.objectToJsonString(user), sessionId);
 				return 3;
 			}
 		}
-		//auditLogService.logInsert(auditLogService.objectToJsonString(user));
-		
 	}
 
 	@Override
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
 		user.setModifiedBy(sessionId);
 		
 		String jsonAfter = auditLogService.objectToJsonString(user);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return userDao.update(user);
 	}
@@ -107,7 +106,7 @@ public class UserServiceImpl implements UserService {
 		user.setDeletedOn(new Date());
 		user.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(user));
+		auditLogService.logDelete(auditLogService.objectToJsonString(user), sessionId);
 		
 		return userDao.update(user);
 	}

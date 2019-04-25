@@ -25,7 +25,6 @@ public class UserDaoImpl extends AbstractHibernateDao<User> implements UserDao {
 		return result;
 	}
 
-	@Override
 	public User findByUsername(String username) {
 		String hql = "FROM User U" + " WHERE U.username = :username"
 				+ " AND U.isDelete ='false'";
@@ -36,8 +35,6 @@ public class UserDaoImpl extends AbstractHibernateDao<User> implements UserDao {
 		return result;
 	}
 	
-
-	@Override
 	public Collection<User> findByEmail(String email) {
 		String hql = "FROM User U" + " WHERE U.email = :email"
 				+ " AND U.isDelete ='false'";

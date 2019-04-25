@@ -36,7 +36,7 @@ public class OfficeServiceImpl implements OfficeService {
 		office.setDelete(false);
 		officeDao.save(office);
 		
-		auditLogService.logInsert(auditLogService.objectToJsonString(office));
+		auditLogService.logInsert(auditLogService.objectToJsonString(office), sessionId);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class OfficeServiceImpl implements OfficeService {
 		office.setModifiedOn(new Date());
 		
 		String jsonAfter = auditLogService.objectToJsonString(office);
-		auditLogService.logUpdate(jsonBefore, jsonAfter);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return officeDao.update(office);
 	}
@@ -81,7 +81,7 @@ public class OfficeServiceImpl implements OfficeService {
 		office.setDeletedOn(new Date());
 		office.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(office));
+		auditLogService.logDelete(auditLogService.objectToJsonString(office), sessionId);
 		
 		return officeDao.update(office);
 	}

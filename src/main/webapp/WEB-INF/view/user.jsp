@@ -53,28 +53,26 @@
 				email : $('#search').val()
 			},
 			success : function(d) {
-				debugger;
 				tbUser.clear().draw();
 				$(d).each(function(index, element) {
-					
-						tbUser.row.add([
-							element.username,
-							element.role.name,
-							element.email,
-							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-							+ '<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-edit" onclick="loadData('
-							+ element.id
-							+ ')">Edit</a></li>'
-							+ '<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-reset" onclick="loadData('
-							+ element.id
-							+ ')">Reset Password</a></li>'
-							+ '<li><a href="javascript:void(0)" onclick="deleteDisabled('
-							+ element.id
-							+ ')">Delete</a></li>'
-							+ '</ul></div>',
-							element.id ])
-						.draw();
+					tbUser.row.add([
+						element.username,
+						element.role.name,
+						element.email,
+						'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+						+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+						+ '<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-edit" onclick="loadData('
+						+ element.id
+						+ ')">Edit</a></li>'
+						+ '<li><a href="javascript:void(0)" data-toggle="modal" data-target="#modal-reset" onclick="loadData('
+						+ element.id
+						+ ')">Reset Password</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="deleteDisabled('
+						+ element.id
+						+ ')">Delete</a></li>'
+						+ '</ul></div>',
+						element.id
+					]).draw();
 					
 				});
 			},
@@ -85,74 +83,97 @@
 	function loadData(id) {
 		reset();
 		$.ajax({
-				type : 'get',
-				url : 'user/' + id,
-				success : function(d) {
-					$('input[name=id]').val(d.id);
-					$('select[name=roleId]').val(d.roleId);
-					$('input[name=roleId]').val(d.roleId);
-					$('input[name=email]').val(d.email);
-					$('input[name=username]').val(d.username);
-					$('#form-edit input[name=password]').val(d.password);
-					$('input[name=mobileFlag]').val([d.mobileFlag]);
-					$('input[name=mobileToken]').val(d.mobileToken);
-					modeSubmit ='update';
-				},
-				error : function(d) {
-					console.log('Error!');
-				}
-			});
+			type : 'get',
+			url : 'user/' + id,
+			success : function(d) {
+				$('input[name=id]').val(d.id);
+				$('select[name=roleId]').val(d.roleId);
+				$('input[name=roleId]').val(d.roleId);
+				$('input[name=email]').val(d.email);
+				$('input[name=username]').val(d.username);
+				$('#form-edit input[name=password]').val(d.password);
+				$('input[name=mobileFlag]').val([d.mobileFlag]);
+				$('input[name=mobileToken]').val(d.mobileToken);
+				modeSubmit ='update';
+			},
+			error : function(d) {
+				console.log('Error!');
+			}
+		});
+	}
+
+	//function untuk check huruf
+	function cekHuruf(a) {
+		valid = /^[A-Za-z0-9_.]{8,20}$/;
+		return valid.test(a);
 	}
 	
 	// function untuk save data user
 	function saveData(tipe) {
-
-
 		var method;
-		
+		var data;
+
 		if (tipe == 'add') {
-			var data = getFormData($('#form-add'));
-			$('#modal-add').modal('hide');
+			data = getFormData($('#form-add'));
 			method = 'POST';
 		} else if (tipe == 'edit') {
-			var data = getFormData($('#form-edit'));
-			$('#modal-edit').modal('hide');
+			data = getFormData($('#form-edit'));
 			method = 'PUT';
 		} else if (tipe == 'reset') {
-			var data = getFormData($('#form-reset'));
-			$('#modal-reset').modal('hide');
+			data = getFormData($('#form-reset'));
 			method = 'PUT';
 		}
-		if(data.password == data.retypePass){
+
+		if ($('#roleId').val() == 'Choose Role' || $('#email').val() == '' || $('#username').val() == '' || $('#password').val() == '' || $('#retypePass').val() == '') {
+			if ($('#roleId').val() == 'Choose Role') {
+				$('#roleId').notify("Pilih data!", "error", {position: "right"});
+			}
+			if ($('#email').val() == '') {
+				$('#email').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+			if ($('#username').val() == '') {
+				$('#username').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+			if ($('#password').val() == '') {
+				$('#password').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+			if ($('#retypePass').val() == '') {
+				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+		} else if(!cekHuruf($('#username').val())) {
+			$("#username").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
+		} else if(!cekHuruf($('#password').val())) {
+			$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
+		} else if(data.password != data.retypePass) {
+			$('#retypePass').notify("Password tidak sama. Ketik ulang password Anda", "error", {position: "right"});
+			$('#retypePass').trigger('reset');
+			$('#form-reset input[name=retypePass]').trigger('reset');
+		} else {
 			$.ajax({
 				type : method,
 				url : 'user/',
 				data : JSON.stringify(data),
 				contentType : 'application/json',
 				success : function(d) {
-					debugger;
 					showData();
 					if (d == 1) {
-						alert("Email sudah terdaftar!");
+						$('#form-add #email').notify("Email sudah terdaftar!", "error",	{position: "right"});
 						$('#form-add input[name=email]').trigger('reset');
 					} else if (d == 2) {
-						alert("Username sudah terdaftar");
+						$('#form-add #username').notify("Username sudah terdaftar!", "error", {position: "right"});
 						$('#form-add input[name=username]').trigger("reset");
 					} else if (d == 3){
-						alert("Data successfully saved!");
+						$.notify("Data successfully saved!", "success");
 					}
 					modeSubmit = 'insert';
+					$('#modal-add').modal('hide');
+					$('#modal-edit').modal('hide');
+					$('#modal-reset').modal('hide');
 				},
 				error : function(d) {
 					console.log('Error');
 				}
 			});
-
-			}
-		else {
-			alert("Password tidak sama.\nKetik ulang password Anda!");
-			$('#form-add input[name=retypePass]').trigger('reset');
-			$('#form-reset input[name=retypePass]').trigger('reset');
 		}
 	}
 
