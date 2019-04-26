@@ -46,7 +46,7 @@
 <body class="hold-transition login-page">
 	<div class="login-box">
 		<div class="login-logo">
-			<a href="/"><b>X</b>sis <b>B</b>ootcamp <b>C</b>ore</a>
+			<a href="/"><b>Xsis Bootcamp Core</a>
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">

@@ -407,10 +407,10 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hide" class="form-control" name="id" id="idEdit">
+											<input type="hidden" class="form-control" name="id" id="idEdit">
 										</div>
 										<div class="form-group">
-											<input type="hide" class="form-control"
+											<input type="hidden" class="form-control"
 												id="roleId2" name="roleId">
 										</div>
 										<div class="form-group">

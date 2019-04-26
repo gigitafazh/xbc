@@ -44,13 +44,6 @@
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <script>
 	var modeSubmit = 'insert';
-	var tbUser;
-
-	var currentdate = new Date();
-	var datetime = currentdate.getFullYear() + "-"
-			+ (currentdate.getMonth() + 1) + "-" + currentdate.getDate() + " "
-			+ currentdate.getHours() + ":" + currentdate.getMinutes() + ":"
-			+ currentdate.getSeconds();
 
 	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
@@ -61,24 +54,21 @@
 		return indexed_array;
 	}
 
-	// function untuk load data dropdown role
-	function showDataRole(d) {
-		var s = '<option>Silahkan Pilih</option>';
-		$(d)
-				.each(
-						function(index, element) {
-							s += '<option value="' + element.id + '" data-nama="' + element.name + '">'
-									+ element.name + '</option>';
-						});
-		$('#roleId').html(s);
+	//function untuk check huruf
+	function cekHuruf(a) {
+		valid = /^[A-Za-z0-9_.]{8,20}$/;
+		return valid.test(a);
 	}
 
-	function loadDataRole() {
+	//
+	function loadData() {
+		var search = $('#email').val();
+		
 		$.ajax({
 			type : 'get',
-			url : 'role/',
+			url : 'forgot-password/search/?find=' + search,
 			success : function(d) {
-				showDataRole(d);
+				saveData();
 			},
 			error : function(d) {
 				console.log('Error');
@@ -86,48 +76,41 @@
 		});
 	}
 
-	// function untuk load pada saat forgot password
-	function loadForgotPass(id) {
-		$.ajax({
-			type : 'get',
-			url : 'user/' + id,
-			success : function(d) {
-				loadDataRole();
-				$('.modal-body #id').val(d.id);
-				$('.modal-body #roleId').val(d.roleId);
-				$('.modal-body #password').val(d.password);
-				$('.modal-body #email').val(d.email);
-				$('.modal-body #username').val(d.username);
-				$('.modal-body #mobileFlag').val(d.mobileFlag);
-				$('.modal-body #mobileToken').val(d.mobileToken);
-				$('.modal-body #modifiedOn').val(datetime);
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
-	}
+	// function untuk save data user
+	function saveData() {
+		var data = getFormData($('#form-edit'));
 
-	// function untuk save reset password user
-	function saveForgotPass() {
-		var data = getFormData($('#form-forgotPass'));
-		$.ajax({
-			type : 'put',
-			url : 'user/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				if (d.retypePass == d.password) {
-					modeSubmit = 'update';
+		if ($('#password').val().trim().length == 0 || $('#retypePass').val().trim().length == 0) {
+			if ($('#password').val().trim().length == 0) {
+				$('#password').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+			if ($('#retypePass').val().trim().length == 0) {
+				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+		} else if(!cekHuruf($('#password').val())) {
+			$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
+		} else if(data.password != data.retypePass) {
+			$('#retypePass').notify("Password tidak sama. Ketik ulang password Anda", "error", {position: "right"});
+			$('#retypePass').trigger('reset');
+			$('#form-edit input[name=retypePass]').trigger('reset');
+		} else {
+			debugger;
+			$.ajax({
+				type : 'put',
+				url : 'forgot-password/change',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					debugger;
 					location.reload();
-				} else {
-					alert("Password tidak sama!\nKetik ulang password anda");
+					$.notify("Data successfully saved!", "success");
+				},
+				error : function(d) {
+					debugger;
+					console.log('Error');
 				}
-			},
-			error : function(d) {
-				console.log('Error');
-			}
-		});
+			});
+		}
 	}
 </script>
 </head>
@@ -138,42 +121,26 @@
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
-			<form id="form-forgotPass">
+			<form id="form-edit">
 				<div class="row">
 					<div class="col-xs-12">
-						<div class="form-group">
-							<input type="hidden" class="form-control" name="id" id="id">
-						</div>
-						<div class="form-group">
-							<input type="hidden" class="form-control" name="roleId"
-								id="roleId">
-						</div>
-						<div class="form-group">
-							<input type="hidden" class="form-control" name="username"
-								id="username">
-						</div>
 						<div class="form-group">
 							<label>Email</label><input type="text" class="form-control"
 								name="email" id="email">
 						</div>
 						<div class="form-group">
-							<label>Password</label> <input type="text" class="form-control"
+							<label>Password</label><input type="text" class="form-control"
 								name="password" id="password">
 						</div>
 						<div class="form-group">
 							<label>Re-type Password</label> <input type="text"
 								class="form-control" name="retypePass" id="retypePass">
 						</div>
-						<div class="form-group">
-							<input type="hidden" class="form-control" name="modifiedOn"
-								id="modifiedOn">
-						</div>
 						<div class="form-group pull-right">
-							<button type="button" class="btn btn-default" onclick="reset()">Cancel</button>
-							&nbsp;
-							<button type="button" class="btn btn-primary"
-								onclick="saveForgotPass()">Save</button>
-						</div>
+				<button type="button" class="btn btn-default" onclick="window.location.href = '${pageContext.request.contextPath}/login';">Cancel</button>
+				&nbsp;
+				<button type="button" class="btn btn-primary" onclick="loadData()">Save</button>
+			</div>
 					</div>
 				</div>
 			</form>
