@@ -42,9 +42,8 @@
 <!-- Google Font -->
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	
 <script>
-	var modeSubmit = 'insert';
-
 	function getFormData($form) {
 		var unindexed_array = $form.serializeArray();
 		var indexed_array = {};
@@ -88,7 +87,7 @@
 				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
 		} else if(!cekHuruf($('#password').val())) {
-			$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
+			//$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
 		} else if(data.password != data.retypePass) {
 			$('#retypePass').notify("Password tidak sama. Ketik ulang password Anda", "error", {position: "right"});
 			$('#retypePass').trigger('reset');
@@ -97,7 +96,7 @@
 			debugger;
 			$.ajax({
 				type : 'put',
-				url : 'forgot-password/change',
+				url : 'forgot-password/change/',
 				data : JSON.stringify(data),
 				contentType : 'application/json',
 				success : function(d) {

@@ -67,9 +67,12 @@ public class ForgotPasswordController {
 	}
 	
 	@RequestMapping(value = "/change/", method = RequestMethod.PUT)
-	public ResponseEntity<User> forgotPassword(@RequestBody User user, HttpSession session) {
-		userService.update(user, (Integer) session.getAttribute("sessionId"));
-
+	public ResponseEntity<User> forgotPassword(@RequestBody User user) {
+		User usr = userService.email(user.getEmail());
+		
+		usr.setPassword(user.getPassword());
+		userService.update(usr, usr.getId());
+		
 		ResponseEntity<User> result = new ResponseEntity<>(HttpStatus.OK);
 		return result;
 

@@ -52,4 +52,14 @@ public class UserDaoImpl extends AbstractHibernateDao<User> implements UserDao {
 		Collection<User> result = q.list();
 		return result;
 	}
+	
+	public User email(String email) {
+		String hql = "FROM User U" + " WHERE U.email = :email"
+				+ " AND U.isDelete ='false'";
+		Query q = getCurrentSession().createQuery(hql);
+		q.setParameter("email", email);
+		
+		User result = (User) q.uniqueResult();
+		return result;
+	}
 }

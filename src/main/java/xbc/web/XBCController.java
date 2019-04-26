@@ -53,7 +53,7 @@ public class XBCController {
 		return "menu-access";
 	}
 	
-	@RequestMapping("forgot-password")
+	@RequestMapping("/forgot-password")
 	public String forgotPassword() {
 		return "forgot-password";
 	}

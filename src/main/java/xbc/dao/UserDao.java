@@ -22,4 +22,6 @@ public interface UserDao {
 	public Collection<User> findByEmail(String email);
 	
 	public Collection<User> search(String find);
+
+	public User email(String email);
 }

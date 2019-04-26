@@ -132,4 +132,9 @@ public class UserServiceImpl implements UserService {
 		}
 		return countUsername;
 	}
+
+	@Override
+	public User email(String email) {
+		return userDao.email(email);
+	}
 }
