@@ -1,5 +1,7 @@
 package xbc.web;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,8 +13,14 @@ public class XBCController {
 	}
 	
 	@RequestMapping("/login")
-	public String login() {
-		return "login";
+	public String login(HttpSession session) {
+		String result;
+		if(session.getAttribute("sessionId") == null) {
+			result = "login";
+		} else {
+			result = "redirect:/secure/home";
+		}
+		return result;
 	}
 	
 	@RequestMapping("/secure/home")

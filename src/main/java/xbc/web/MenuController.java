@@ -24,10 +24,17 @@ public class MenuController {
 	@Autowired
 	private MenuService menuService;
 
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Menu>> findAll() {
+		Collection<Menu> list = menuService.findAll();
+		ResponseEntity<Collection<Menu>> result = new ResponseEntity<>(list, HttpStatus.OK);
+		return result;
+	}
+	
 	@RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Menu>> findAll(@PathVariable("id") Integer id) {
+	public ResponseEntity<Collection<Menu>> findAllByRole(@PathVariable("id") Integer id) {
 		Collection<Menu> list = menuService.findAllByRole(id);
-		//Collection<Menu> list = menuService.findAll();
+		
 		ResponseEntity<Collection<Menu>> result = new ResponseEntity<>(list, HttpStatus.OK);
 		return result;
 	}

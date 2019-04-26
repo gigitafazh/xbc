@@ -74,8 +74,8 @@
 	src="${pageContext.request.contextPath}/assets/js/notify.min.js"></script>
 
 <script>
-	// function untuk show data
-	function showMenu() {
+	// function untuk show data side bar menu
+	function showSideMenu() {
 		var roleId = ${sessionScope.sessionRole.id}
 		$.ajax({
 			type : 'get',
@@ -88,9 +88,9 @@
 			}
 		});
 	}
-
+	
 	$(document).ready(function() {
-		showMenu();
+		showSideMenu();
 	});
 </script>
 

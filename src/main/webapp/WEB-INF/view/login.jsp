@@ -87,15 +87,14 @@
 	<!-- /.login-box -->
 
 	<!-- jQuery 3 -->
-	<script
-		src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
+	<script src="${pageContext.request.contextPath}/assets/js/jquery.min.js"></script>
 	<!-- Bootstrap 3.3.7 -->
-	<script
-		src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>
 	<!-- iCheck -->
-	<script
-		src="${pageContext.request.contextPath}/assets/js/icheck.min.js"></script>
+	<script src="${pageContext.request.contextPath}/assets/js/icheck.min.js"></script>
+	
 	<script>
+		<script>
 		$(function() {
 			$('input').iCheck({
 				checkboxClass : 'icheckbox_square-blue',
@@ -103,6 +102,7 @@
 				increaseArea : '20%' /* optional */
 			});
 		});
+		</script>
 	</script>
 </body>
 

@@ -21,24 +21,24 @@
 			url : 'office/',
 			success : function(d) {
 				tbOffice.clear().draw();
-					$(d).each(function(index, element) {
-						tbOffice.row.add([
-							element.name,
-							element.phone,
-							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-							+ '<li><a href="javascript:void(0)" onclick="loadOffice('
-							+ element.id
-							+ ')">Edit</a></li>'
-							+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
-							+ element.id
-							+ ')">Delete</a></li>'
-							+ '</ul></div>',
-							element.email,
-							element.address,
-							element.notes,
-							element.id 
-						]).draw();
+				$(d).each(function(index, element) {
+					tbOffice.row.add([
+						element.name,
+						element.phone,
+						'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+						+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+						+ '<li><a href="javascript:void(0)" onclick="loadOffice('
+						+ element.id
+						+ ')">Edit</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
+						+ element.id
+						+ ')">Delete</a></li>'
+						+ '</ul></div>',
+						element.email,
+						element.address,
+						element.notes,
+						element.id 
+					]).draw();
 					$('#officeId').val(element.id);
 				});
 			}
@@ -55,27 +55,26 @@
 			},
 			success : function(d) {
 				tbOffice.clear().draw();
-					$(d).each(function(index, element) {
-						tbOffice.row.add([
-							element.name,
-							element.phone,
-							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-							+ '<li><a href="javascript:void(0)" onclick="loadOffice('
-							+ element.id
-							+ ')">Edit</a></li>'
-							+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
-							+ element.id
-							+ ')">Delete</a></li>'
-							+ '</ul></div>',
-							element.email,
-							element.address,
-							element.notes,
-							element.id 
-						]).draw();
-					}
-					$('#officeId').val(element.id);
+				$(d).each(function(index, element) {
+					tbOffice.row.add([
+						element.name,
+						element.phone,
+						'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+						+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+						+ '<li><a href="javascript:void(0)" onclick="loadOffice('
+						+ element.id
+						+ ')">Edit</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="deleteOffice('
+						+ element.id
+						+ ')">Delete</a></li>'
+						+ '</ul></div>',
+						element.email,
+						element.address,
+						element.notes,
+						element.id 
+					]).draw();
 				});
+				$('#officeId').val(element.id);
 			}
 		});
 	}
@@ -111,26 +110,25 @@
 			url : 'room/',
 			success : function(d) {
 				tbRoom.clear().draw();
-					$(d).each(function(index, element) {
-						tbRoom.row.add([
-							element.code,
-							element.name,
-							element.capacity,
-							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
-							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
-							+ '<li><a href="javascript:void(0)" onclick="loadRoom('
-							+ element.id
-							+ ')">Edit</a></li>'
-							+ '<li><a href="javascript:void(0)" onclick="deleteRoom('
-							+ element.id
-							+ ')">Delete</a></li>'
-							+ '</ul></div>',
-							element.anyProjector,
-							element.notes,
-							element.officeId,
-							element.id
-						]).draw();
-					}
+				$(d).each(function(index, element) {
+					tbRoom.row.add([
+						element.code,
+						element.name,
+						element.capacity,
+						'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+						+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+						+ '<li><a href="javascript:void(0)" onclick="loadRoom('
+						+ element.id
+						+ ')">Edit</a></li>'
+						+ '<li><a href="javascript:void(0)" onclick="deleteRoom('
+						+ element.id
+						+ ')">Delete</a></li>'
+						+ '</ul></div>',
+						element.anyProjector,
+						element.notes,
+						element.officeId,
+						element.id
+					]).draw();
 				});
 			}
 		});
@@ -175,19 +173,37 @@
 			method = 'PUT';
 		}
 
-		$.ajax({
-			type : method,
-			url : 'office/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				showOffice();
-				$('#modal-office').modal('hide');
-			},
-			error : function(d) {
-				console.log('Error');
+		if ($('#name').val().trim().length == 0 || $('#phone').val().trim().length == 0 || $('#email').val().trim().length == 0 || $('#address').val().trim().length == 0 || $('#notes').val().trim().length == 0) {
+			if ($('#name').val().trim().length == 0) {
+				$('#name').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-		});
+			if ($('#phone').val().trim().length == 0) {
+				$('#phone').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#email').val().trim().length == 0) {
+				$('#email').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#address').val().trim().length == 0) {
+				$('#address').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#notes').val().trim().length == 0) {
+				$('#notes').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+		} else {
+			$.ajax({
+				type : method,
+				url : 'office/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					showOffice();
+					$('#modal-office').modal('hide');
+				},
+				error : function(d) {
+					console.log('Error');
+				}
+			});
+		}
 	}
 
 	// function untuk save data room
@@ -205,19 +221,37 @@
 			method = 'PUT';
 		}
 
-		$.ajax({
-			type : method,
-			url : 'room/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				showRoom();
-				$('#modal-room').modal('hide');
-			},
-			error : function(d) {
-				console.log('Error');
+		if ($('#code').val().trim().length == 0 || $('#name').val().trim().length == 0 || $('#capacity').val().trim().length == 0 || $('#anyProjector').val().trim().length == 0 || $('#notes').val().trim().length == 0) {
+			if ($('#code').val().trim().length == 0) {
+				$('#code').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-		});
+			if ($('#name').val().trim().length == 0) {
+				$('#name').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#capacity').val().trim().length == 0) {
+				$('#capacity').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#anyProjector').val().trim().length == 0) {
+				$('#anyProjector').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+			if ($('#notes').val().trim().length == 0) {
+				$('#notes').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			}
+		} else {
+			$.ajax({
+				type : method,
+				url : 'room/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					showRoom();
+					$('#modal-room').modal('hide');
+				},
+				error : function(d) {
+					console.log('Error');
+				}
+			});
+		}
 	}
 
 	// function untuk delete data office

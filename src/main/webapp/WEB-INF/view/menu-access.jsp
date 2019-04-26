@@ -136,19 +136,28 @@
 		} else {
 			method = 'PUT';
 		}
-
-		$.ajax({
-			type : method,
-			url : 'menu-access/',
-			data : JSON.stringify(data),
-			contentType : 'application/json',
-			success : function(d) {
-				showMenuAccess();
-			},
-			error : function(d) {
-				console.log('Error');
+		
+		if ($('#roleId').val() == 'Choose Role' || $('#menuId').val() == 'Choose Menu') {
+			if ($('#roleId').val() == 'Choose Role') {
+				$('#roleId').notify("Pilih data!", "error", {position: "right"});
 			}
-		});
+			if ($('#menuId').val() == 'Choose Menu') {
+				$('#menuId').notify("Pilih data!", "error", {position: "right"});
+			}
+		} else {
+			$.ajax({
+				type : method,
+				url : 'menu-access/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					showMenuAccess();
+				},
+				error : function(d) {
+					console.log('Error');
+				}
+			});
+		}
 	}
 
 	// function untuk delete data menu access

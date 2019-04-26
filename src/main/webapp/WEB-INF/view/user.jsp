@@ -124,20 +124,20 @@
 			method = 'PUT';
 		}
 
-		if ($('#roleId').val() == 'Choose Role' || $('#email').val() == '' || $('#username').val() == '' || $('#password').val() == '' || $('#retypePass').val() == '') {
+		if ($('#roleId').val() == 'Choose Role' || $('#email').val().trim().length == 0 || $('#username').val().trim().length == 0 || $('#password').val().trim().length == 0 || $('#retypePass').val().trim().length == 0) {
 			if ($('#roleId').val() == 'Choose Role') {
 				$('#roleId').notify("Pilih data!", "error", {position: "right"});
 			}
-			if ($('#email').val() == '') {
+			if ($('#email').val().trim().length == 0) {
 				$('#email').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#username').val() == '') {
+			if ($('#username').val().trim().length == 0) {
 				$('#username').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#password').val() == '') {
+			if ($('#password').val().trim().length == 0) {
 				$('#password').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#retypePass').val() == '') {
+			if ($('#retypePass').val().trim().length == 0) {
 				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
 		} else if(!cekHuruf($('#username').val())) {
@@ -407,10 +407,10 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="text" class="form-control" name="id" id="idEdit">
+											<input type="hide" class="form-control" name="id" id="idEdit">
 										</div>
 										<div class="form-group">
-											<input type="text" class="form-control"
+											<input type="hide" class="form-control"
 												id="roleId2" name="roleId">
 										</div>
 										<div class="form-group">
