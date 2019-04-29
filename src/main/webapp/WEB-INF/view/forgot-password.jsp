@@ -55,7 +55,7 @@
 
 	//function untuk check huruf
 	function cekHuruf(a) {
-		valid = /^[A-Za-z0-9_.]{8,20}$/;
+		valid = /^[A-Za-z0-9_.]{8,}$/;
 		return valid.test(a);
 	}
 
@@ -87,28 +87,45 @@
 				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
 		} else if(!cekHuruf($('#password').val())) {
-			//$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
+			$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
 		} else if(data.password != data.retypePass) {
 			$('#retypePass').notify("Password tidak sama. Ketik ulang password Anda", "error", {position: "right"});
-			$('#retypePass').trigger('reset');
-			$('#form-edit input[name=retypePass]').trigger('reset');
 		} else {
-			debugger;
 			$.ajax({
 				type : 'put',
 				url : 'forgot-password/change/',
 				data : JSON.stringify(data),
 				contentType : 'application/json',
 				success : function(d) {
-					debugger;
 					location.reload();
 					$.notify("Data successfully saved!", "success");
 				},
 				error : function(d) {
-					debugger;
 					console.log('Error');
 				}
 			});
+		}
+	}
+	
+	function myPass() {
+		var x = document.getElementById("password");
+		if (x.type == "password") {
+			x.type = "text";
+			$('#tes').removeClass("fa-eye-slash").addClass("fa-eye");
+		} else {
+			x.type = "password";
+			$('#tes').removeClass("fa-eye").addClass("fa-eye-slash");
+		}
+	}
+
+	function myRePass() {
+		var x = document.getElementById("retypePass");
+		if (x.type == "password") {
+			x.type = "text";
+			$('#tes2').removeClass("fa-eye-slash").addClass("fa-eye");
+		} else {
+			x.type = "password";
+			$('#tes2').removeClass("fa-eye").addClass("fa-eye-slash");
 		}
 	}
 </script>
@@ -128,12 +145,28 @@
 								name="email" id="email">
 						</div>
 						<div class="form-group">
-							<label>Password</label><input type="text" class="form-control"
-								name="password" id="password">
+							<label>Password</label>
+							<div class="input-group">
+								<input type="password" class="form-control" name="password"
+									id="password">
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="myPass()">
+										<i class="fa fa-eye-slash" id="tes" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
 						</div>
 						<div class="form-group">
-							<label>Re-type Password</label> <input type="text"
-								class="form-control" name="retypePass" id="retypePass">
+							<label>Re-type Password</label>
+							<div class="input-group">
+								<input type="password" class="form-control" name="retypePass"
+									id="retypePass">
+								<div class="input-group-btn">
+									<button type="button" class="btn btn-default" onclick="myRePass()">
+										<i class="fa fa-eye-slash" id="tes2" aria-hidden="true"></i>
+									</button>
+								</div>
+							</div>
 						</div>
 						<div class="form-group pull-right">
 				<button type="button" class="btn btn-default" onclick="window.location.href = '${pageContext.request.contextPath}/login';">Cancel</button>

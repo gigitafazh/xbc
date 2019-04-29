@@ -19,9 +19,11 @@ public interface UserService {
 
 	public Collection<User> search(String find);
 	
-	public User findByUsername(String username);
+	public Collection<User> findByEmail(String email, Integer id);
 	
-	public Collection<User> findByEmail(String email);
+	public Collection<User> findByUsername(String username, Integer id);
+	
+	public User username(String username);
 
 	public User email(String email);
 	

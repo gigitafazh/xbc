@@ -46,7 +46,7 @@
 <body class="hold-transition login-page">
 	<div class="login-box">
 		<div class="login-logo">
-			<a href="/"><b>Xsis Bootcamp Core</a>
+			<a href="/"><b>Xsis Bootcamp Core</b></a>
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
@@ -55,7 +55,7 @@
 			<form action="${pageContext.request.contextPath}/j_spring_security_check"
 				method="POST">
 				<div class="form-group has-feedback">
-					<input type="username" class="form-control" name="username"
+					<input type="text" class="form-control" name="username"
 						placeholder="Username" required> <span
 						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>

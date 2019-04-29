@@ -122,8 +122,6 @@
 
 	// function untuk save data menu access
 	function saveMenuAccess() {
-		$("#menuId option[value='defMenu']").prop('selected', true);
-		$("#roleId option[value='defRole']").prop('selected', true);
 		var unindexed_data = $('#form-menu-access').serializeArray();
 		var data = {};
 		$.map(unindexed_data, function(n, i) {
@@ -137,11 +135,11 @@
 			method = 'PUT';
 		}
 		
-		if ($('#roleId').val() == 'Choose Role' || $('#menuId').val() == 'Choose Menu') {
-			if ($('#roleId').val() == 'Choose Role') {
+		if ($('#roleId').val() == 'defRole' || $('#menuId').val() == 'defMenu') {
+			if ($('#roleId').val() == 'defRole') {
 				$('#roleId').notify("Pilih data!", "error", {position: "right"});
 			}
-			if ($('#menuId').val() == 'Choose Menu') {
+			if ($('#menuId').val() == 'defMenu') {
 				$('#menuId').notify("Pilih data!", "error", {position: "right"});
 			}
 		} else {

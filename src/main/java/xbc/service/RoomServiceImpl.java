@@ -25,8 +25,8 @@ public class RoomServiceImpl implements RoomService {
 	}
 
 	@Override
-	public Collection<Room> findAll() {
-		return roomDao.findAll();
+	public Collection<Room> findAll(Integer id) {
+		return roomDao.findAll(id);
 	}
 	
 	@Override

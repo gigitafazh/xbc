@@ -26,7 +26,7 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             HttpServletResponse response, 
             Authentication authentication) throws IOException, ServletException {
         
-        User currentUser = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        User currentUser = userService.username(SecurityContextHolder.getContext().getAuthentication().getName());
         
         HttpSession session = request.getSession(true);
         session.setAttribute("sessionId", currentUser.getId());

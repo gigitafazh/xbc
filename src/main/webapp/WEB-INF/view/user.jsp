@@ -33,6 +33,7 @@
 				});
 				$('#roleId').html(s);
 				$('#roleId2').html(s);
+				$('#roleId3').html(s);
 			}
 		});
 	}
@@ -104,70 +105,134 @@
 
 	//function untuk check huruf
 	function cekHuruf(a) {
-		valid = /^[A-Za-z0-9_.]{8,20}$/;
+		valid = /^[A-Za-z0-9]{8,}$/;
 		return valid.test(a);
 	}
 	
 	// function untuk save data user
-	function saveData(tipe) {
-		var method;
-		var data;
-
-		if (tipe == 'add') {
-			data = getFormData($('#form-add'));
-			method = 'POST';
-		} else if (tipe == 'edit') {
-			data = getFormData($('#form-edit'));
-			method = 'PUT';
-		} else if (tipe == 'reset') {
-			data = getFormData($('#form-reset'));
-			method = 'PUT';
-		}
-
+	function saveData() {
+		var data = getFormData($('#form-add'));
+		
 		if ($('#roleId').val() == 'Choose Role' || $('#email').val().trim().length == 0 || $('#username').val().trim().length == 0 || $('#password').val().trim().length == 0 || $('#retypePass').val().trim().length == 0) {
 			if ($('#roleId').val() == 'Choose Role') {
 				$('#roleId').notify("Pilih data!", "error", {position: "right"});
 			}
-			if ($('#email').val().trim().length == 0) {
+			else if ($('#email').val().trim().length == 0) {
 				$('#email').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#username').val().trim().length == 0) {
+			else if ($('#username').val().trim().length == 0) {
 				$('#username').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#password').val().trim().length == 0) {
+			else if ($('#password').val().trim().length == 0) {
 				$('#password').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-			if ($('#retypePass').val().trim().length == 0) {
+			else if ($('#retypePass').val().trim().length == 0) {
 				$('#retypePass').notify("Data tidak boleh kosong", "error", {position: "right"});
 			}
-		} else if(!cekHuruf($('#username').val())) {
-			$("#username").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
 		} else if(!cekHuruf($('#password').val())) {
 			$("#password").notify("Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9", "info", {position:"right"})
 		} else if(data.password != data.retypePass) {
 			$('#retypePass').notify("Password tidak sama. Ketik ulang password Anda", "error", {position: "right"});
 			$('#retypePass').trigger('reset');
-			$('#form-reset input[name=retypePass]').trigger('reset');
+			$('#input[name=retypePass]').trigger('reset');
 		} else {
 			$.ajax({
-				type : method,
+				type : 'post',
+				url : 'user/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					if (d == 1) {
+						debugger;
+						$('#email').notify("Email sudah terdaftar!", "error", {position: "right"});
+					} else if (d == 2) {
+						debugger;
+						$('#username').notify("Username sudah terdaftar!", "error", {position: "right"});
+					} else if (d == 3){
+						debugger;
+						$.notify("Data successfully saved!", "success");
+						$('#modal-add').modal('hide');
+					}
+					showData();
+					modeSubmit = 'insert';
+				},
+				error : function(d) {
+					console.log('Error');
+				}
+			});
+		}
+	}
+
+	// function untuk save edit data user
+	function saveEdit() {
+		var data = getFormData($('#form-edit'));
+	
+		if ($('#roleId2').val() == 'Choose Role' || $('#email2').val().trim().length == 0 || $('#username2').val().trim().length == 0) {
+			if ($('#roleId2').val() == 'Choose Role') {
+				$('#roleId2').notify("Pilih data!", "error", {position: "right"});
+			}
+			else if ($('#email2').val().trim().length == 0) {
+				$('#email2').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+			else if ($('#username2').val().trim().length == 0) {
+				$('#username2').notify("Data tidak boleh kosong", "error", {position: "right"});
+			}
+		} else {
+			$.ajax({
+				type : 'put',
 				url : 'user/',
 				data : JSON.stringify(data),
 				contentType : 'application/json',
 				success : function(d) {
 					showData();
-					if (d == 1) {
-						$('#form-add #email').notify("Email sudah terdaftar!", "error",	{position: "right"});
-						$('#form-add input[name=email]').trigger('reset');
-					} else if (d == 2) {
-						$('#form-add #username').notify("Username sudah terdaftar!", "error", {position: "right"});
-						$('#form-add input[name=username]').trigger("reset");
-					} else if (d == 3){
-						$.notify("Data successfully saved!", "success");
-					}
-					modeSubmit = 'insert';
-					$('#modal-add').modal('hide');
+					$.notify("Data successfully saved!", "success");
+					modeSubmit = 'update';
 					$('#modal-edit').modal('hide');
+				},
+				error : function(d) {
+					console.log('Error');
+				}
+			});
+		}
+	}
+
+	// function untuk save reset data user
+	function saveReset() {
+		var data = getFormData($('#form-reset'));
+	
+		if ($('#password3').val().trim().length == 0) {
+			$('#password3').notify("Data tidak boleh kosong", "error", {
+				position : "right"
+			});
+		} else if ($('#retypePass3').val().trim().length == 0) {
+			$('#retypePass3').notify("Data tidak boleh kosong", "error", {
+				position : "right"
+			});
+		} else if (!cekHuruf($('#password3').val())) {
+			$("#password3")
+					.notify(
+							"Minimal 8 karakter dengan kombinasi a-z atau A-Z atau 0-9",
+							"info", {
+								position : "right"
+							})
+		} else if (data.password != data.retypePass) {
+			$('#retypePass3').notify(
+					"Password tidak sama. Ketik ulang password Anda", "error",
+					{
+						position : "right"
+					});
+			$('#retypePass3').trigger('reset');
+			$('#retypePass3').trigger('reset');
+		} else {
+			$.ajax({
+				type : 'put',
+				url : 'user/',
+				data : JSON.stringify(data),
+				contentType : 'application/json',
+				success : function(d) {
+					showData();
+					$.notify("Data successfully saved!", "success");
+					modeSubmit = 'update';
 					$('#modal-reset').modal('hide');
 				},
 				error : function(d) {
@@ -201,6 +266,7 @@
 		$('#form-reset').trigger('reset');
 		$('#form-add input[type=hidden]').val('');
 		$('#form-edit input[type=hidden]').val('');
+		$('#form-edit input[readOnly=readOnly]').val('');
 		$('#form-reset input[type=hidden]').val('');
 	}
 
@@ -266,7 +332,7 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>Email</label> <input type="text" class="form-control"
+											<label>Email</label> <input type="email" class="form-control"
 												name="email" id="email">
 										</div>
 										<div class="form-group">
@@ -289,7 +355,7 @@
 									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveData('add')">Save</button>
+									onclick="saveData()">Save</button>
 							</div>
 						</form>
 					</div>
@@ -339,7 +405,7 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="idEdit">
+											<input type="hidden" class="form-control" name="id" id="id2">
 										</div>
 										<div class="form-group">
 											<label>Role</label> <select
@@ -348,21 +414,21 @@
 											</select>
 										</div>
 										<div class="form-group">
-											<label>Email</label> <input type="text" class="form-control"
-												name="email" id="email">
+											<label>Email</label> <input type="email" class="form-control"
+												name="email" id="email2" readOnly="readonly">
 										</div>
 										<div class="form-group">
 											<label>Username</label> <input type="text"
-												class="form-control" name="username" id="username">
+												class="form-control" name="username" id="username2" readOnly="readOnly">
 										</div>
 										<div class="form-group">
 											<input type="hidden"
-												class="form-control" name="password" id="password">
+												class="form-control" name="password" id="password2">
 										</div>
 										<div class="form-group">
 											<label>Mobile Flag</label>
 											<div class="input-group">
-												<input type="radio" name="mobileFlag" id="mobileFlag"
+												<input type="radio" name="mobileFlag" id="mobileFlag2"
 													value="true"> True &nbsp; <input type="radio"
 													name="mobileFlag" id="mobileFlag" value="false">
 												False
@@ -380,7 +446,7 @@
 									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveData('edit')">Save</button>
+									onclick="saveEdit()">Save</button>
 							</div>
 						</form>
 					</div>
@@ -407,37 +473,37 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="idEdit">
+											<input type="text" class="form-control" name="id" id="id3">
 										</div>
 										<div class="form-group">
 											<input type="hidden" class="form-control"
-												id="roleId2" name="roleId">
+												id="roleId3" name="roleId">
 										</div>
 										<div class="form-group">
 											<input type="hidden" class="form-control"
-												name="email" id="email">
+												name="email" id="email3">
 										</div>
 										<div class="form-group">
 											<input type="hidden"
-												class="form-control" name="username" id="username">
+												class="form-control" name="username" id="username3">
 										</div>
 										<div class="form-group">
 											<label>Password</label><input type="text"
-												class="form-control" name="password" id="password">
+												class="form-control" name="password" id="password3">
 										</div>
 										<div class="form-group">
 											<label>Re-type Password</label> <input type="text"
-												class="form-control" name="retypePass" id="retypePass">
+												class="form-control" name="retypePass" id="retypePass3">
 										</div>
 										<div class="form-group">
 											<div class="input-group">
 												<input type="hidden" class="form-control" name="mobileFlag"
-													id="mobileFlag">
+													id="mobileFlag3">
 											</div>
 										</div>
 										<div class="form-group">
 											<input type="hidden"
-												class="form-control" name="mobileToken" id="mobileToken">
+												class="form-control" name="mobileToken" id="mobileToken3">
 										</div>
 									</div>
 								</div>
@@ -447,7 +513,7 @@
 									data-dismiss="modal">Cancel</button>
 								&nbsp;
 								<button type="button" class="btn btn-primary"
-									onclick="saveData('reset')">Save</button>
+									onclick="saveReset()">Save</button>
 							</div>
 						</form>
 					</div>

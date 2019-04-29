@@ -74,7 +74,6 @@
 						element.id 
 					]).draw();
 				});
-				$('#officeId').val(element.id);
 			}
 		});
 	}
@@ -86,14 +85,31 @@
 		} else {
 			$.ajax({
 				type : 'get',
-				url : 'office/' + id,
+				url : 'room/office-id/' + id,
 				success : function(d) {
-					$('#form-office input[name=id]').val(d.id);
-					$('input[name=name]').val(d.name);
-					$('input[name=phone]').val(d.phone);
-					$('input[name=email]').val(d.email);
-					$('textarea[name=address]').val(d.address);
-					$('textarea[name=notes]').val(d.notes);
+					$('#form-office input[name=id]').val(d[0].id);
+					$('input[name=name]').val(d[0].office.name);
+					$('input[name=phone]').val(d[0].office.phone);
+					$('input[name=email]').val(d[0].office.email);
+					$('textarea[name=address]').val(d[0].office.address);
+					$('textarea[name=notes]').val(d[0].office.notes);
+					tbRoom.clear().draw();
+					$(d).each(function(index, element) {
+						tbRoom.row.add([
+							element.code,
+							element.name,
+							element.capacity,
+							'<div class="dropdown"><button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">'
+							+ '<i class="fa fa-bars"></i></button><ul class="dropdown-menu">'
+							+ '<li><a href="javascript:void(0)" onclick="loadRoom('
+							+ element.id
+							+ ')">Edit</a></li>'
+							+ '<li><a href="javascript:void(0)" onclick="deleteRoom('
+							+ element.id
+							+ ')">Delete</a></li>'
+							+ '</ul></div>'
+						]).draw();
+					});
 				},
 				error : function(d) {
 					console.log('Error!');
@@ -146,7 +162,7 @@
 					$('#form-room input[name=id]').val(d.id);
 					$('input[name=code]').val(d.code);
 					$('input[name=capacity]').val(d.capacity);
-					$('input[name=anyProjector]').val(d.anyProjector);
+					$('input[name=anyProjector]').val([d.anyProjector]);
 					$('textarea[name=notes]').val(d.notes);
 					$('input[name=officeId]').val(d.officeId);
 				},
@@ -177,16 +193,16 @@
 			if ($('#name').val().trim().length == 0) {
 				$('#name').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#phone').val().trim().length == 0) {
+			else if ($('#phone').val().trim().length == 0) {
 				$('#phone').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#email').val().trim().length == 0) {
+			else if ($('#email').val().trim().length == 0) {
 				$('#email').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#address').val().trim().length == 0) {
+			else if ($('#address').val().trim().length == 0) {
 				$('#address').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#notes').val().trim().length == 0) {
+			else if ($('#notes').val().trim().length == 0) {
 				$('#notes').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
 		} else {
@@ -221,21 +237,21 @@
 			method = 'PUT';
 		}
 
-		if ($('#code').val().trim().length == 0 || $('#name').val().trim().length == 0 || $('#capacity').val().trim().length == 0 || $('#anyProjector').val().trim().length == 0 || $('#notes').val().trim().length == 0) {
+		if ($('#code').val().trim().length == 0 || $('#name2').val().trim().length == 0 || $('#capacity').val().trim().length == 0 || $('#anyProjector').val().trim().length == 0 || $('#notes2').val().trim().length == 0) {
 			if ($('#code').val().trim().length == 0) {
 				$('#code').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#name').val().trim().length == 0) {
-				$('#name').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			else if ($('#name2').val().trim().length == 0) {
+				$('#name2').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#capacity').val().trim().length == 0) {
+			else if ($('#capacity').val().trim().length == 0) {
 				$('#capacity').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#anyProjector').val().trim().length == 0) {
+			else if ($('#anyProjector').val().trim().length == 0) {
 				$('#anyProjector').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
-			if ($('#notes').val().trim().length == 0) {
-				$('#notes').notify("Data tidak boleh kosong!", "error", {position: "right"});
+			else if ($('#notes2').val().trim().length == 0) {
+				$('#notes2').notify("Data tidak boleh kosong!", "error", {position: "right"});
 			}
 		} else {
 			$.ajax({
@@ -464,14 +480,14 @@
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="form-group">
-											<input type="hidden" class="form-control" name="id" id="id">
+											<input type="hidden" class="form-control" name="id" id="id2">
 										</div>
 										<div class="form-group">
 											<input type="text" class="form-control" name="code" id="code"
 												placeholder="Code">
 										</div>
 										<div class="form-group">
-											<input type="text" class="form-control" name="name" id="name"
+											<input type="text" class="form-control" name="name" id="name2"
 												placeholder="Name">
 										</div>
 										<div class="form-group">
@@ -487,7 +503,7 @@
 											</div>
 										</div>
 										<div class="form-group">
-											<textarea class="form-control" name="notes" id="notes"
+											<textarea class="form-control" name="notes" id="notes2"
 												placeholder="Description"></textarea>
 										</div>
 										<div class="form-group">

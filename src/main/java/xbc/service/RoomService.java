@@ -7,7 +7,7 @@ import xbc.model.Room;
 public interface RoomService {
 	public Room findOne(Integer id);
 
-	public Collection<Room> findAll();
+	public Collection<Room> findAll(Integer id);
 	
 	public void save(Room room, Integer sessionId);
 

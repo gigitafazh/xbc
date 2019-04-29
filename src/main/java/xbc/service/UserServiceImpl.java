@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
 		user.setCreatedBy(sessionId);
 		user.setDelete(false);
 		
-		Integer countUsername = this.checkUsername(user.getUsername());
-		Integer countEmail = this.checkEmail(user.getEmail());
+		Integer countEmail = this.checkEmail(user.getEmail(), user.getId());
+		Integer countUsername = this.checkUsername(user.getUsername(), user.getId());
 		
 		if (countEmail > 0) {
 			user.setEmail(user.getEmail());
@@ -90,51 +90,60 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User findByUsername(String username) {
-		return userDao.findByUsername(username);
+	public User email(String email) {
+		return userDao.email(email);
+	}
+
+	@Override
+	public User username(String username) {
+		return userDao.username(username);
 	}
 	
 	@Override
-	public Collection<User> findByEmail(String email) {
-		return userDao.findByEmail(email);
+	public Collection<User> findByUsername(String username, Integer id) {
+		return userDao.findByUsername(username,id);
+	}
+	
+	@Override
+	public Collection<User> findByEmail(String email, Integer id) {
+		return userDao.findByEmail(email, id);
 	}
 
 	@Override
 	public User deleteDisabled(Integer id, Integer sessionId) {
 		User user = userDao.findOne(id);
+		
+		String jsonBefore = auditLogService.objectToJsonString(user);
+		
 		user.setDeletedBy(sessionId);
 		user.setDeletedOn(new Date());
 		user.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(user), sessionId);
+		String jsonAfter = auditLogService.objectToJsonString(user);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return userDao.update(user);
 	}
 	
-	public Integer checkEmail(String email) {
-		Collection<User> list = userDao.findByEmail(email);
+	public Integer checkEmail(String email, Integer id) {
+		Collection<User> list = userDao.findByEmail(email, id);
 		Integer countEmail = 0;
-		if (list == null) {
+		if (list.isEmpty()) {
 			countEmail = 0;
 		} else {
-			countEmail = list.size();
+			countEmail = 1;
 		}
 		return countEmail;
 	}
 	
-	public Integer checkUsername(String username) {
-		User list = userDao.findByUsername(username);
+	public Integer checkUsername(String username, Integer id) {
+		Collection<User> list = userDao.findByUsername(username, id);
 		Integer countUsername = 0;
-		if (list == null) {
+		if (list.isEmpty()) {
 			countUsername = 0;
 		} else {
 			countUsername = 1;
 		}
 		return countUsername;
-	}
-
-	@Override
-	public User email(String email) {
-		return userDao.email(email);
 	}
 }

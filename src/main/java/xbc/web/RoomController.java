@@ -18,7 +18,7 @@ import xbc.model.Room;
 import xbc.service.RoomService;
 
 @RestController
-@RequestMapping("/room")
+@RequestMapping("secure/room")
 public class RoomController {
 
 	@Autowired
@@ -32,9 +32,9 @@ public class RoomController {
 		return result;
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Collection<Room>> findAll() {
-		Collection<Room> list = roomService.findAll();
+	@RequestMapping(value = "/office-id/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Collection<Room>> findAll(@PathVariable("id") Integer id) {
+		Collection<Room> list = roomService.findAll(id);
 
 		ResponseEntity<Collection<Room>> result = new ResponseEntity<>(list, HttpStatus.OK);
 		return result;

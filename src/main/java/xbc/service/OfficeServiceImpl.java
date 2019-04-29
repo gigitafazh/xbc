@@ -77,11 +77,15 @@ public class OfficeServiceImpl implements OfficeService {
 	@Override
 	public Office deleteDisabled(Integer id, Integer sessionId) {
 		Office office = officeDao.findOne(id);
+		
+		String jsonBefore = auditLogService.objectToJsonString(office);
+		
 		office.setDeletedBy(sessionId);
 		office.setDeletedOn(new Date());
 		office.setDelete(true);
 		
-		auditLogService.logDelete(auditLogService.objectToJsonString(office), sessionId);
+		String jsonAfter = auditLogService.objectToJsonString(office);
+		auditLogService.logUpdate(jsonBefore, jsonAfter, sessionId);
 		
 		return officeDao.update(office);
 	}
